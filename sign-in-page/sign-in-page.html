@@ -6,29 +6,83 @@
                 height: 100%;
                 width: 100%;
                 display: flex;
+                flex-direction: column;
                 justify-content: center;
                 align-items: center;
                 padding: 0;
                 margin: 0;
             }
 
+            .input-wrapper {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 2em 3em;
+                background-color: beige;
+                border: 1.5ch solid darkgray;
+            }
+
             form {
                 display: flex;
                 flex-direction: column;
                 gap: 1em;
+                font-size: 1.4em;
+            }
+
+            form > * { /* For some reason, form font sizes are hardcoded. */
+                font-size: 1em; 
             }
 
             .form-submit-button {
                 width: 33%;
                 margin: auto;
+                border: none;
+                border-radius: none;
+                padding: .2ch;
+                background-color: darkgray;
+                color: white;
+                transition: .2s;
+            }
+
+            .form-submit-button:hover {
+                transition: .2s;
+                background-color: lightgray;
+            }
+
+            .forgot-password-link {
+                background-color: black;
+                color: white;
+                padding: .5ch;
+                font-weight: bold;
+                text-decoration: none;
+                transition: .2s;
+            }
+
+            .forgot-password-link:hover {
+                transition: .2s;
+                background-color: gray;
+            }
+
+            .company-title {
+                margin-bottom: 1.5em;
+                font-family: 'Georgia';
             }
         </style>
     </head>
     <body>
-        <form>
-            <input type="text" id="username" placeholder="Enter Username" />
-            <input type="password" id="password" placeholder="Enter Password" />
-            <input class="form-submit-button" type="submit" value="Log in"/>
-        </form>
+        <div class="input-wrapper">
+            <h1 class="company-title">Company Name</h1>
+
+            <br>
+
+            <form>
+                <input type="text" id="username" placeholder="Enter Username" />
+                <input type="password" id="password" placeholder="Enter Password" />
+                <input class="form-submit-button" type="submit" value="Log in"/>
+            </form>
+
+            <a class="forgot-password-link" href="/">Forgot Password?</a>
+        </div>
     </body>
 </html>
