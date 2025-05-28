@@ -16,7 +16,9 @@ function isEven(num) {
 
 function countChar(string, searchedChar) {
     let counter = 0;
-    for (let i = 0; i < string.length; i++) if (string[i] === searchedChar) counter++;
+    for (let i = 0; i < string.length; i++) {
+      if (string[i] === searchedChar) counter++
+    };
     return counter;
 }
 
