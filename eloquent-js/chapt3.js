@@ -5,8 +5,8 @@ function min(a, b) {
 function isEven(num) {
     function recursiveEvennessSearch(x) {
         if (x === 0) return true;
-        else if (x === 1) return false;
-        else return recursiveEvennessSearch(x - 2);
+        if (x === 1) return false;
+        return recursiveEvennessSearch(x - 2);
     }
 
     if (num < 0) num = -num;
