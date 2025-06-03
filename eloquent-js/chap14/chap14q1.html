@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Eloquent JS Chapter 14 Q1</title>
+</head>
+<body>
+    <h1>Mountains</h1>
+
+    <div id="mountains"></div>
+
+    <script>
+        const MOUNTAINS = [
+            {name: "Kilimanjaro", height: 5895, place: "Tanzania"},
+            {name: "Everest", height: 8848, place: "Nepal"},
+            {name: "Mount Fuji", height: 3776, place: "Japan"},
+            {name: "Vaalserberg", height: 323, place: "Netherlands"},
+            {name: "Denali", height: 6168, place: "United States"},
+            {name: "Popocatepetl", height: 5465, place: "Mexico"},
+            {name: "Mont Blanc", height: 4808, place: "Italy/France"}
+        ];
+
+        function createMountainTable(mountainArray) {
+            let table = document.createElement("table");
+            let tableKeys = Object.keys(mountainArray[0]);
+
+            let tableHeaderElement = document.createElement("tr");
+            for (let header of tableKeys) {
+                let headerElement = document.createElement("th");
+                headerElement.innerHTML = header;
+                tableHeaderElement.appendChild(headerElement);
+            }
+            table.appendChild(tableHeaderElement);
+
+            for (let mountain of mountainArray) {
+                let mountainElement = document.createElement("tr");
+                for (let i = 0; i < tableKeys.length; i++) {
+                    let mountainDataPointElement = document.createElement("td");
+                    // If the element is missing, it'll show an empty table cell.
+                    mountainDataPointElement.innerHTML = mountain[tableKeys[i]];
+                    mountainElement.appendChild(mountainDataPointElement);
+                }
+                table.appendChild(mountainElement);
+            }
+
+            document.getElementById("mountains").appendChild(table);
+        }
+
+        createMountainTable(MOUNTAINS);
+    </script>
+</body>
+</html>
