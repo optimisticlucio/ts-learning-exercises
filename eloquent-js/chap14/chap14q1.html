@@ -21,26 +21,33 @@
         ];
 
         function createMountainTable(mountainArray) {
-            let table = document.createElement("table");
-            let tableKeys = Object.keys(mountainArray[0]);
+            const table = document.createElement("table");
+            const tableColumnNames = Object.keys(mountainArray[0]);
 
-            let tableHeaderElement = document.createElement("tr");
-            for (let header of tableKeys) {
-                let headerElement = document.createElement("th");
-                headerElement.innerHTML = header;
-                tableHeaderElement.appendChild(headerElement);
-            }
-            table.appendChild(tableHeaderElement);
+            const tableHeaders = document.createElement("tr");
+
+            const tableHeaderCells = tableColumnNames.map((columnName) => {
+                const cell = document.createElement('th');
+                cell.innerHTML = columnName;
+                return cell;
+            })
+
+            tableHeaders.append(...tableHeaderCells);
+
+            table.appendChild(tableHeaders);
 
             for (let mountain of mountainArray) {
-                let mountainElement = document.createElement("tr");
-                for (let i = 0; i < tableKeys.length; i++) {
-                    let mountainDataPointElement = document.createElement("td");
+                const mountainData = document.createElement("tr");
+
+                const mountainDataCells = tableColumnNames.map((columnName) => {
+                    const cell = document.createElement("td");
                     // If the element is missing, it'll show an empty table cell.
-                    mountainDataPointElement.innerHTML = mountain[tableKeys[i]];
-                    mountainElement.appendChild(mountainDataPointElement);
-                }
-                table.appendChild(mountainElement);
+                    cell.innerHTML = mountain[columnName];
+                    return cell;
+                });
+
+                mountainData.append(...mountainDataCells);
+                table.appendChild(mountainData);
             }
 
             document.getElementById("mountains").appendChild(table);

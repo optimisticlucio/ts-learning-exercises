@@ -28,8 +28,8 @@
             if (lastTime != null) angle += (time - lastTime) * 0.001;
             lastTime = time;
 
-            let catTop = (Math.sin(angle) * 100 + 200);
-            let catLeft = (Math.cos(angle) * 200 + 230);
+            const catTop = (Math.sin(angle) * 100 + 200);
+            const catLeft = (Math.cos(angle) * 200 + 230);
 
             cat.style.top = catTop + "px";
             cat.style.left = catLeft + "px";
