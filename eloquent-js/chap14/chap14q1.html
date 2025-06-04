@@ -25,30 +25,33 @@
             const tableColumnNames = Object.keys(mountainArray[0]);
 
             const tableHeaders = document.createElement("tr");
-
             const tableHeaderCells = tableColumnNames.map((columnName) => {
                 const cell = document.createElement('th');
                 cell.innerHTML = columnName;
                 return cell;
             })
-
             tableHeaders.append(...tableHeaderCells);
-
             table.appendChild(tableHeaders);
 
-            for (let mountain of mountainArray) {
-                const mountainData = document.createElement("tr");
+            const tableContents = mountainArray.map(mountain => {
+                const tableRow = document.createElement("tr");
 
                 const mountainDataCells = tableColumnNames.map((columnName) => {
                     const cell = document.createElement("td");
                     // If the element is missing, it'll show an empty table cell.
                     cell.innerHTML = mountain[columnName];
+
+                    if (Number.isInteger(cell.innerHTML)) {
+                        cell.style.textAlign = "right";
+                    }
+
                     return cell;
                 });
 
-                mountainData.append(...mountainDataCells);
-                table.appendChild(mountainData);
-            }
+                tableRow.append(...mountainDataCells);
+                return tableRow;
+            })
+            table.append(...tableContents);
 
             document.getElementById("mountains").appendChild(table);
         }

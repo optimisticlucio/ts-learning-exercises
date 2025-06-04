@@ -34,9 +34,13 @@
             cat.style.top = catTop + "px";
             cat.style.left = catLeft + "px";
 
-            hat.style.top = catTop + -40 + "px";
+            const hatDistanceFromHead = -40;
+            hat.style.top = catTop + hatDistanceFromHead + "px";
             hat.style.left = catLeft + "px";
-            hat.style.transform = "scale(" + Math.sin(3 * angle) + ", 1)";
+
+            const hatSpinSpeedMultiplier = 3;
+            const hatHorizontalScale = Math.sin(hatSpinSpeedMultiplier * angle)
+            hat.style.transform = `scale( ${hatHorizontalScale}, 1)`;
 
             requestAnimationFrame(animate);
         }
