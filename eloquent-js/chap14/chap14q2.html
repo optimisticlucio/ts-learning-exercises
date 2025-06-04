@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Eloquent JS Chapter 14 Q2</title>
+</head>
+<body>
+
+  <h1>Heading with a <span>span</span> element.</h1>
+  <p>A paragraph with <span>one</span>, <span>two</span>
+    spans.</p>
+
+  <script>
+    function byTagName(node, tagName) {
+      const relevantElements = [];
+
+      for (const childNode of Array.from(node.children)) {
+        if (tagName.toUpperCase() === childNode.tagName) {
+          relevantElements.push(childNode);
+        }
+
+        if (childNode.children && childNode.children.length > 0) {
+          relevantElements.push(...byTagName(childNode, tagName));
+        }
+      }
+
+      return relevantElements;
+    }
+
+    console.log(byTagName(document.body, "h1").length);
+    // → 1
+    console.log(byTagName(document.body, "span").length);
+    // → 3
+    let para = document.querySelector("p");
+    console.log(byTagName(para, "span").length);
+    // → 2
+  </script>
+
+</body>
+</html>
