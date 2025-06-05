@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chapter 15 Question 2</title>
+  <!-- this style element is copied as-is from the book -->
+    <style>
+      .trail { /* className for the trail elements */
+        position: absolute;
+        height: 6px; width: 6px;
+        border-radius: 3px;
+        background: teal;
+      }
+      body {
+        height: 300px;
+      }
+    </style>
+</head>
+<body>
+  <script>
+    const mouseTrailUpdateTimeInMilliseconds = 20; // Assumed to be >0
+    const amountOfMouseTrailElements = 5;
+    const amountOfTickDelaysForElements = 5; // Assumed to be >0
+
+    const previousMousePositions = new Array(amountOfMouseTrailElements * amountOfTickDelaysForElements);
+    let mousePositionArrayIndex = 0 // For circular array usage.
+
+    let lastMousePosition = {"x": 0, "y": 0};
+    previousMousePositions.fill(lastMousePosition);
+
+    function createMouseTrailElements() {
+      // Note - tried making this a "const" as you said last time: can't use const in a for loop.
+      // Because we change the variable every loop.
+      for (let i = 0; i < amountOfMouseTrailElements; i++) {
+        const newMouseTrailElement = document.createElement("div");
+        newMouseTrailElement.classList.add("trail");
+        newMouseTrailElement.id = i.toString(); // Webstorm gave me a compilation warning for not having toString.
+        document.body.appendChild(newMouseTrailElement);
+      }
+    }
+
+    function updateMouseTrailPositions() {
+      previousMousePositions[mousePositionArrayIndex] = lastMousePosition;
+
+      for (let i = 0; i < amountOfMouseTrailElements; i++) {
+        const currentMouseTrailElement = document.getElementById(i.toString());
+        const relevantMousePosition = previousMousePositions[(previousMousePositions.length + mousePositionArrayIndex - i * amountOfTickDelaysForElements) % previousMousePositions.length];
+
+        currentMouseTrailElement.style.top = relevantMousePosition["y"] + "px";
+        currentMouseTrailElement.style.left = relevantMousePosition["x"] + "px";
+      }
+
+      mousePositionArrayIndex = (mousePositionArrayIndex + 1) % previousMousePositions.length;
+    }
+
+    function rememberNewMousePosition(event) {
+      lastMousePosition = {"x": event.clientX, "y": event.clientY};
+    }
+
+    createMouseTrailElements();
+    setInterval(updateMouseTrailPositions, mouseTrailUpdateTimeInMilliseconds);
+    window.addEventListener("mousemove", rememberNewMousePosition);
+  </script>
+</body>
+</html>

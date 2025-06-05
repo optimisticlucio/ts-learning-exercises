@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chapter 15 Question 1</title>
+</head>
+<body>
+    <p>🎈</p>
+
+    <script>
+        // Exercise said not to touch anything outside of the script tags, so while an id or class would be better...
+        const balloon = document.querySelector("p");
+        const inflationPercentage = 10;
+        const maxBalloonSizeInPixels = 30;
+
+        window.addEventListener("keyup", checkIfToInflateBalloon);
+        window.addEventListener("keydown", checkIfToDeflateBalloon);
+
+        balloon.style.fontSize = "16px";
+
+        function checkIfToInflateBalloon(event) {
+            const balloonInflationKey = "ArrowUp";
+
+            if (event.key === balloonInflationKey) {
+                multiplyBalloonSize(1 + (inflationPercentage / 100));
+                if (parseFloat(balloon.style.fontSize) > maxBalloonSizeInPixels) {
+                    explodeBalloon();
+                }
+            }
+        }
+
+        function checkIfToDeflateBalloon(event) {
+            const balloonDeflationKey = "ArrowDown";
+
+            if (event.key === balloonDeflationKey) {
+                multiplyBalloonSize(1 - (inflationPercentage / 100));
+            }
+        }
+
+        function explodeBalloon() {
+            window.removeEventListener("keyup", checkIfToInflateBalloon);
+            window.removeEventListener("keydown", checkIfToDeflateBalloon);
+            balloon.innerHTML = "💥";
+        }
+
+        function multiplyBalloonSize(percentage) {
+            // Assumes the balloon's fontSize is set by "px"
+            const currentBalloonSize = parseFloat(balloon.style.fontSize);
+            balloon.style.fontSize = currentBalloonSize * percentage + "px";
+        }
+    </script>
+</body>
+</html>
