@@ -29,7 +29,7 @@
 
             const tabButtonHolder = document.createElement("div");
             tabButtonHolder.className = "tab-panel-buttons";
-            const tabButtons = Array.from(tabHolder.children).map( (tab) => {
+            const tabButtons = Array.from(tabHolder.children).map((tab) => {
                 const tabButton = document.createElement("button");
                 tabButton.innerText = tab.dataset.tabname;
                 tabButton.onclick = () => switchToTab(tab, tabButton);

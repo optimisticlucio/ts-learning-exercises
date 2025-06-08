@@ -18,9 +18,7 @@
         balloon.style.fontSize = "16px";
 
         function checkIfToInflateBalloon(event) {
-            const balloonInflationKey = "ArrowUp";
-
-            if (event.key === balloonInflationKey) {
+            if (event.key === "ArrowUp") {
                 multiplyBalloonSize(1 + (inflationPercentage / 100));
                 if (parseFloat(balloon.style.fontSize) > maxBalloonSizeInPixels) {
                     explodeBalloon();
