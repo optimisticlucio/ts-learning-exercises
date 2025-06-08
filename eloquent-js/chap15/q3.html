@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chapter 15 Question 3</title>
+    <style>
+        button.selected {
+            background-color: yellow;
+            color: blue;
+        }
+
+        .tab-panel-tabs {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <div class="tab-panel">
+        <div data-tabname="one">Tab one</div>
+        <div data-tabname="two">Tab two</div>
+        <div data-tabname="three">Tab three</div>
+    </div>
+
+    <script>
+        function asTabs(node) {
+            const tabHolder = document.createElement("div");
+            tabHolder.className = "tab-panel-tabs";
+            tabHolder.append(...node.children);
+
+            const tabButtonHolder = document.createElement("div");
+            tabButtonHolder.className = "tab-panel-buttons";
+            const tabButtons = Array.from(tabHolder.children).map( (tab) => {
+                const tabButton = document.createElement("button");
+                tabButton.innerText = tab.dataset.tabname;
+                tabButton.onclick = () => switchToTab(tab, tabButton);
+                return tabButton;
+            });
+            tabButtonHolder.append(...tabButtons);
+
+            node.append(tabButtonHolder, tabHolder);
+            tabButtons[0].click();
+
+            function switchToTab(tabToSwitchTo, buttonOfSwitchedTab) {
+                for (let tab of tabHolder.children) {
+                    tab.style.display = "none";
+                }
+
+                for (let tabButton of tabButtons) {
+                    tabButton.classList.remove("selected");
+                }
+
+                tabToSwitchTo.style.display = "";
+                buttonOfSwitchedTab.classList.add("selected");
+            }
+        }
+
+        asTabs(document.querySelector(".tab-panel"));
+    </script>
+</body>
+</html>

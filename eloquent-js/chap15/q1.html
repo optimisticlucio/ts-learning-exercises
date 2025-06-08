@@ -5,11 +5,10 @@
     <title>Chapter 15 Question 1</title>
 </head>
 <body>
-    <p>🎈</p>
+    <p id="balloon">🎈</p>
 
     <script>
-        // Exercise said not to touch anything outside of the script tags, so while an id or class would be better...
-        const balloon = document.querySelector("p");
+        const balloon = document.querySelector("#balloon");
         const inflationPercentage = 10;
         const maxBalloonSizeInPixels = 30;
 
