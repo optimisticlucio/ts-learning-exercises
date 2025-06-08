@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chapter 15 Question 2</title>
+  <!-- this style element is copied as-is from the book -->
+    <style>
+      .trail { /* className for the trail elements */
+        position: absolute;
+        height: 6px; width: 6px;
+        border-radius: 3px;
+        background: teal;
+      }
+      body {
+        height: 300px;
+      }
+    </style>
+</head>
+<body>
+  <script>
+    const mouseTrailUpdateTimeInMilliseconds = 20; // Assumed to be >0
+    const amountOfMouseTrailElements = 5;
+    const amountOfTickDelaysForElements = 5; // Assumed to be >0
+
+    const previousMousePositions = new Array(amountOfMouseTrailElements * amountOfTickDelaysForElements);
+    let mousePositionArrayIndex = 0 // For circular array usage.
+
+    let lastMousePosition = { x: 0, y: 0 };
+    previousMousePositions.fill(lastMousePosition);
+
+    let mouseTrailElements;
+
+    function createMouseTrailElements() {
+        mouseTrailElements = new Array(amountOfMouseTrailElements).fill(null).map((_) => {
+            const trailElement = document.createElement("div");
+            trailElement.className = "trail";
+            return trailElement;
+        });
+        document.body.append(...mouseTrailElements);
+    }
+
+    function updateMouseTrailPositions() {
+      previousMousePositions[mousePositionArrayIndex] = lastMousePosition;
+
+      for (let i = 0; i < amountOfMouseTrailElements; i++) {
+        const relevantMousePosition = previousMousePositions[(previousMousePositions.length + mousePositionArrayIndex - i * amountOfTickDelaysForElements) % previousMousePositions.length];
+
+        mouseTrailElements[i].style.top = relevantMousePosition["y"] + "px";
+        mouseTrailElements[i].style.left = relevantMousePosition["x"] + "px";
+      }
+
+      mousePositionArrayIndex = (mousePositionArrayIndex + 1) % previousMousePositions.length;
+    }
+
+    function rememberNewMousePosition(event) {
+      lastMousePosition = { x: event.clientX, y: event.clientY};
+    }
+
+    createMouseTrailElements();
+    setInterval(updateMouseTrailPositions, mouseTrailUpdateTimeInMilliseconds);
+    window.addEventListener("mousemove", rememberNewMousePosition);
+  </script>
+</body>
+</html>

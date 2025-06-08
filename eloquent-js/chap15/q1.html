@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chapter 15 Question 1</title>
+</head>
+<body>
+    <p id="balloon">🎈</p>
+
+    <script>
+        const balloon = document.querySelector("#balloon");
+        const inflationPercentage = 10;
+        const maxBalloonSizeInPixels = 30;
+
+        window.addEventListener("keyup", checkIfToInflateBalloon);
+        window.addEventListener("keydown", checkIfToDeflateBalloon);
+
+        balloon.style.fontSize = "16px";
+
+        function checkIfToInflateBalloon(event) {
+            if (event.key === "ArrowUp") {
+                multiplyBalloonSize(1 + (inflationPercentage / 100));
+                if (parseFloat(balloon.style.fontSize) > maxBalloonSizeInPixels) {
+                    explodeBalloon();
+                }
+            }
+        }
+
+        function checkIfToDeflateBalloon(event) {
+            const balloonDeflationKey = "ArrowDown";
+
+            if (event.key === balloonDeflationKey) {
+                multiplyBalloonSize(1 - (inflationPercentage / 100));
+            }
+        }
+
+        function explodeBalloon() {
+            window.removeEventListener("keyup", checkIfToInflateBalloon);
+            window.removeEventListener("keydown", checkIfToDeflateBalloon);
+            balloon.innerHTML = "💥";
+        }
+
+        function multiplyBalloonSize(percentage) {
+            // Assumes the balloon's fontSize is set by "px"
+            const currentBalloonSize = parseFloat(balloon.style.fontSize);
+            balloon.style.fontSize = currentBalloonSize * percentage + "px";
+        }
+    </script>
+</body>
+</html>
