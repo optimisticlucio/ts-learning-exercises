@@ -24,17 +24,32 @@ body {
 }
 
 .carousel-content-holder {
+    min-width: 20em;
+    max-width: 30em;
+    min-height: 10em;
+    max-height: 20em;
 
+    display: flex;
+    justify-content: space-around;
+}
+
+.carousel-content-holder > * {
+    max-width: 100%;
+    max-height: 100%;
 }
 
 .carousel-content-holder > .hidden {
     display: none;
 }
 
-.carousel-dots {
+.carousel-dot-holder {
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
     gap: 2ch;
+}
+
+.carousel-button {
+    min-width: 2em;
 }
