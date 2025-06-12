@@ -24,10 +24,11 @@ body {
 }
 
 .carousel-content-holder {
-    min-width: 20em;
-    max-width: 30em;
-    min-height: 10em;
-    max-height: 20em;
+    width: 30em;
+    height: 20em;
+    overflow: hidden;
+
+    position: relative;
 
     display: flex;
     justify-content: space-around;
@@ -36,6 +37,12 @@ body {
 .carousel-content-holder > * {
     max-width: 100%;
     max-height: 100%;
+
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 50%;
+
+    transition: 2s;
 }
 
 .carousel-content-holder > .hidden {

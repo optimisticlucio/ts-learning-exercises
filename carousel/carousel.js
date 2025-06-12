@@ -19,6 +19,16 @@ function generateCarousels() {
             moveCarouselToRight(carousel, carouselContentHolder);
         });
 
+        carousel.addEventListener("keydown", (event) => {
+            if (event.key === "ArrowRight") {
+                moveCarouselToRight(carousel, carouselContentHolder);
+            }
+            else if (event.key === "ArrowLeft") {
+                moveCarouselToLeft(carousel, carouselContentHolder);
+            }
+        });
+
+
         const carouselContentAndButtons = document.createElement("div");
         carouselContentAndButtons.classList.add("carousel-content-and-buttons");
         carouselContentAndButtons.append(carouselLeftButton, carouselContentHolder, carouselRightButton);
@@ -27,6 +37,9 @@ function generateCarousels() {
 
         carousel.dataset.currentlyDisplaying = "0";
         carouselContentHolder.children[0].classList.remove("hidden");
+        updateLocationOfAdjacentCarouselItems(carousel, carouselContentHolder);
+
+        carousel.addEventListener("transitionend", () => hideAdjacentCarouselItems(carousel, carouselContentHolder));
 
         carousel.append(carouselTitle, carouselContentAndButtons)
     }
@@ -51,16 +64,44 @@ function generateCarouselDotHolder(amountOfDots) {
 
 function moveCarouselToRight(carousel, carouselContentHolder) {
     const carouselChildren = carouselContentHolder.children;
-    carouselChildren[carousel.dataset.currentlyDisplaying].classList.add("hidden");
-    carousel.dataset.currentlyDisplaying = ((parseInt(carousel.dataset.currentlyDisplaying) + 1 + carouselChildren.length) % carouselChildren.length).toString();
-    carouselChildren[carousel.dataset.currentlyDisplaying].classList.remove("hidden");
+    carouselChildren[getIncrementOfCurrentlyDisplaying(carousel, carouselContentHolder,1)].classList.remove("hidden");
+
+    updateCurrentlyDisplaying(carousel, carouselContentHolder, 1);
+    updateLocationOfAdjacentCarouselItems(carousel, carouselContentHolder);
 }
 
 function moveCarouselToLeft(carousel, carouselContentHolder) {
     const carouselChildren = carouselContentHolder.children;
-    carouselChildren[carousel.dataset.currentlyDisplaying].classList.add("hidden");
-    carousel.dataset.currentlyDisplaying = ((parseInt(carousel.dataset.currentlyDisplaying) - 1 + carouselChildren.length) % carouselChildren.length).toString();
-    carouselChildren[carousel.dataset.currentlyDisplaying].classList.remove("hidden");
+    carouselChildren[getIncrementOfCurrentlyDisplaying(carousel, carouselContentHolder,-1)].classList.remove("hidden");
+
+    updateCurrentlyDisplaying(carousel, carouselContentHolder,-1);
+    updateLocationOfAdjacentCarouselItems(carousel, carouselContentHolder);
+}
+
+function getIncrementOfCurrentlyDisplaying(carousel, carouselContentHolder, number) {
+    return ((parseInt(carousel.dataset.currentlyDisplaying) + number + carouselContentHolder.children.length) % carouselContentHolder.children.length);
+}
+
+function updateCurrentlyDisplaying(carousel, carouselContentHolder, number) {
+    carousel.dataset.currentlyDisplaying = getIncrementOfCurrentlyDisplaying(carousel, carouselContentHolder, number).toString();
+}
+
+function updateLocationOfAdjacentCarouselItems(carousel, carouselContentHolder){
+    const currentlyDisplaying = parseInt(carousel.dataset.currentlyDisplaying);
+    const rightItemIndex = getIncrementOfCurrentlyDisplaying(carousel, carouselContentHolder, 1);
+    const leftItemIndex = getIncrementOfCurrentlyDisplaying(carousel, carouselContentHolder, -1);
+
+    carouselContentHolder.children[rightItemIndex].left = "150%";
+    carouselContentHolder.children[currentlyDisplaying].left = "50%";
+    carouselContentHolder.children[leftItemIndex].left = "-50%";
+}
+
+function hideAdjacentCarouselItems(carousel) {
+    const rightItemIndex = getIncrementOfCurrentlyDisplaying(carousel, 1);
+    const leftItemIndex = getIncrementOfCurrentlyDisplaying(carousel, -1);
+
+    carousel.children[rightItemIndex].classList.add("hidden");
+    carousel.children[leftItemIndex].classList.add("hidden");
 }
 
 document.addEventListener('DOMContentLoaded', () => {
