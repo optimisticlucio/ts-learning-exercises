@@ -15,6 +15,7 @@ body {
 
 .carousel-title {
     text-align: center;
+    font-family: 'Impact', sans-serif;
 }
 
 .carousel-content-and-buttons {
@@ -44,7 +45,7 @@ body {
     top: 50%;
     left: 50%;
 
-    transition: 2s;
+    transition: 1s ease-in-out;
 }
 
 .carousel-content-holder > .hidden {
@@ -60,5 +61,15 @@ body {
 }
 
 .carousel-button {
-    min-width: 2em;
+    min-width: 3em;
+    border-radius: 0;
+    background-color: cadetblue;
+}
+
+.carousel-button:hover {
+    background-color: aquamarine;
+}
+
+.carousel-button:active {
+    background-color: aqua;
 }
