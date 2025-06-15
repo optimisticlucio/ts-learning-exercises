@@ -1,3 +1,8 @@
+const ALLOW_CAROUSEL_CYCLE = true;
+const AUTOPLAY_TIME_IN_MILLISECONDS = 6000;
+
+const carouselAutoplayIntervalMap = new Map();
+
 // Goes over all items with the carousel class and turns them to proper carousels.
 function generateCarousels() {
     const carousels = Array.from(document.querySelectorAll('.carousel'));
@@ -28,7 +33,6 @@ function generateCarousels() {
             }
         });
 
-
         const carouselContentAndButtons = document.createElement("div");
         carouselContentAndButtons.classList.add("carousel-content-and-buttons");
         carouselContentAndButtons.append(carouselLeftButton, carouselContentHolder, carouselRightButton);
@@ -40,6 +44,10 @@ function generateCarousels() {
         updateLocationOfAdjacentCarouselItems(carousel, carouselContentHolder);
 
         carousel.addEventListener("transitionend", () => hideAdjacentCarouselItems(carousel, carouselContentHolder));
+
+        carouselAutoplayIntervalMap.set(carousel, setInterval(() => {
+            moveCarouselToRight(carousel, carouselContentHolder);
+        }, AUTOPLAY_TIME_IN_MILLISECONDS));
 
         carousel.append(carouselTitle, carouselContentAndButtons)
     }
@@ -63,23 +71,43 @@ function generateCarouselDotHolder(amountOfDots) {
 }
 
 function moveCarouselToRight(carousel, carouselContentHolder) {
+    resetCarouselAutoplay(carousel, carouselContentHolder);
+
     const carouselChildren = carouselContentHolder.children;
     carouselChildren[getIncrementOfCurrentlyDisplaying(carousel, carouselContentHolder,1)].classList.remove("hidden");
 
-    updateCurrentlyDisplaying(carousel, carouselContentHolder, 1);
-    updateLocationOfAdjacentCarouselItems(carousel, carouselContentHolder);
+    // Nested animation frames to assure css animates the transition properly.
+    requestAnimationFrame( () => {
+        updateCurrentlyDisplaying(carousel, carouselContentHolder, 1);
+        requestAnimationFrame(() => {
+            updateLocationOfAdjacentCarouselItems(carousel, carouselContentHolder);
+        });
+    });
 }
 
 function moveCarouselToLeft(carousel, carouselContentHolder) {
+    resetCarouselAutoplay(carousel, carouselContentHolder);
+
     const carouselChildren = carouselContentHolder.children;
     carouselChildren[getIncrementOfCurrentlyDisplaying(carousel, carouselContentHolder,-1)].classList.remove("hidden");
 
-    updateCurrentlyDisplaying(carousel, carouselContentHolder,-1);
-    updateLocationOfAdjacentCarouselItems(carousel, carouselContentHolder);
+    requestAnimationFrame( () => {
+        updateCurrentlyDisplaying(carousel, carouselContentHolder, -1);
+        requestAnimationFrame(() => {
+            updateLocationOfAdjacentCarouselItems(carousel, carouselContentHolder);
+        });
+    });
 }
 
 function getIncrementOfCurrentlyDisplaying(carousel, carouselContentHolder, number) {
-    return ((parseInt(carousel.dataset.currentlyDisplaying) + number + carouselContentHolder.children.length) % carouselContentHolder.children.length);
+    const currentIndexNumber = parseInt(carousel.dataset.currentlyDisplaying);
+    const totalAmountOfItems = carouselContentHolder.children.length;
+
+    if (!ALLOW_CAROUSEL_CYCLE && (currentIndexNumber === 0 || currentIndexNumber === totalAmountOfItems - 1)) {
+        return currentIndexNumber;
+    }
+
+    return ((currentIndexNumber + number + totalAmountOfItems) % totalAmountOfItems);
 }
 
 function updateCurrentlyDisplaying(carousel, carouselContentHolder, number) {
@@ -102,6 +130,13 @@ function hideAdjacentCarouselItems(carousel) {
 
     carousel.children[rightItemIndex].classList.add("hidden");
     carousel.children[leftItemIndex].classList.add("hidden");
+}
+
+function resetCarouselAutoplay(carousel, carouselContentHolder) {
+    clearInterval(carouselAutoplayIntervalMap.get(carousel));
+    carouselAutoplayIntervalMap.set(carousel, setInterval(() => {
+        moveCarouselToRight(carousel, carouselContentHolder);
+    }, AUTOPLAY_TIME_IN_MILLISECONDS));
 }
 
 document.addEventListener('DOMContentLoaded', () => {
