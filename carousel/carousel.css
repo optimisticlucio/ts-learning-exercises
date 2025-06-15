@@ -35,10 +35,9 @@ body {
 }
 
 .carousel-content-holder > * {
-    max-width: 100%;
+    max-width: 90%;
     max-height: 100%;
-    width: fit-content;
-    height: fit-content;
+    width: max-content;
 
     position: absolute;
     transform: translate(-50%, -50%);

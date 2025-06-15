@@ -40,7 +40,7 @@ function generateCarousels() {
         // TODO: Implement generateCarouselDotHolder and connect
 
         carousel.dataset.currentlyDisplaying = "0";
-        carouselContentHolder.children[0].classList.remove("hidden");
+        hideAdjacentCarouselItems(carousel, carouselContentHolder);
         updateLocationOfAdjacentCarouselItems(carousel, carouselContentHolder);
 
         carousel.addEventListener("transitionend", () => hideAdjacentCarouselItems(carousel, carouselContentHolder));
@@ -93,6 +93,7 @@ function moveCarouselToLeft(carousel, carouselContentHolder) {
 
     requestAnimationFrame( () => {
         updateCurrentlyDisplaying(carousel, carouselContentHolder, -1);
+
         requestAnimationFrame(() => {
             updateLocationOfAdjacentCarouselItems(carousel, carouselContentHolder);
         });
@@ -119,17 +120,19 @@ function updateLocationOfAdjacentCarouselItems(carousel, carouselContentHolder){
     const rightItemIndex = getIncrementOfCurrentlyDisplaying(carousel, carouselContentHolder, 1);
     const leftItemIndex = getIncrementOfCurrentlyDisplaying(carousel, carouselContentHolder, -1);
 
-    carouselContentHolder.children[rightItemIndex].left = "150%";
-    carouselContentHolder.children[currentlyDisplaying].left = "50%";
-    carouselContentHolder.children[leftItemIndex].left = "-50%";
+    carouselContentHolder.children[rightItemIndex].style.left = "150%";
+    carouselContentHolder.children[currentlyDisplaying].style.left = "50%";
+    carouselContentHolder.children[leftItemIndex].style.left = "-50%";
 }
 
-function hideAdjacentCarouselItems(carousel) {
-    const rightItemIndex = getIncrementOfCurrentlyDisplaying(carousel, 1);
-    const leftItemIndex = getIncrementOfCurrentlyDisplaying(carousel, -1);
+function hideAdjacentCarouselItems(carousel, carouselContentHolder) {
+    const rightItemIndex = getIncrementOfCurrentlyDisplaying(carousel, carouselContentHolder, 1);
+    const currentItemIndex = getIncrementOfCurrentlyDisplaying(carousel, carouselContentHolder, 0);
+    const leftItemIndex = getIncrementOfCurrentlyDisplaying(carousel,carouselContentHolder, -1);
 
-    carousel.children[rightItemIndex].classList.add("hidden");
-    carousel.children[leftItemIndex].classList.add("hidden");
+    carouselContentHolder.children[rightItemIndex].classList.add("hidden");
+    carouselContentHolder.children[currentItemIndex].classList.remove("hidden");
+    carouselContentHolder.children[leftItemIndex].classList.add("hidden");
 }
 
 function resetCarouselAutoplay(carousel, carouselContentHolder) {
