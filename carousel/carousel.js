@@ -16,20 +16,20 @@ function generateCarousels() {
         const carouselLeftButton = document.createElement("button");
         carouselLeftButton.classList.add("carousel-button");
         carouselLeftButton.addEventListener("click", (e) => {
-            moveCarouselToLeft(carousel, carouselContentHolder);
+            slideCarouselItemsToLeft(carousel, carouselContentHolder);
         });
         const carouselRightButton = document.createElement("button");
         carouselRightButton.classList.add("carousel-button");
         carouselRightButton.addEventListener("click", (e) => {
-            moveCarouselToRight(carousel, carouselContentHolder);
+            slideCarouselItemsToRight(carousel, carouselContentHolder);
         });
 
         carousel.addEventListener("keydown", (event) => {
             if (event.key === "ArrowRight") {
-                moveCarouselToRight(carousel, carouselContentHolder);
+                slideCarouselItemsToRight(carousel, carouselContentHolder);
             }
             else if (event.key === "ArrowLeft") {
-                moveCarouselToLeft(carousel, carouselContentHolder);
+                slideCarouselItemsToLeft(carousel, carouselContentHolder);
             }
         });
 
@@ -39,14 +39,14 @@ function generateCarousels() {
 
         // TODO: Implement generateCarouselDotHolder and connect
 
-        carousel.dataset.currentlyDisplaying = "0";
+        carousel.dataset.currentIndex = "0";
         hideAdjacentCarouselItems(carousel, carouselContentHolder);
         updateLocationOfAdjacentCarouselItems(carousel, carouselContentHolder);
 
         carousel.addEventListener("transitionend", () => hideAdjacentCarouselItems(carousel, carouselContentHolder));
 
         carouselAutoplayIntervalMap.set(carousel, setInterval(() => {
-            moveCarouselToRight(carousel, carouselContentHolder);
+            slideCarouselItemsToRight(carousel, carouselContentHolder);
         }, AUTOPLAY_TIME_IN_MILLISECONDS));
 
         carousel.append(carouselTitle, carouselContentAndButtons)
@@ -70,29 +70,29 @@ function generateCarouselDotHolder(amountOfDots) {
     // TODO: implement
 }
 
-function moveCarouselToRight(carousel, carouselContentHolder) {
+function slideCarouselItemsToRight(carousel, carouselContentHolder) {
     resetCarouselAutoplay(carousel, carouselContentHolder);
 
     const carouselChildren = carouselContentHolder.children;
-    carouselChildren[getIncrementOfCurrentlyDisplaying(carousel, carouselContentHolder,1)].classList.remove("hidden");
+    carouselChildren[getCurrentIndexPlusNumber(carousel, carouselContentHolder,1)].classList.remove("hidden");
 
     // Nested animation frames to assure css animates the transition properly.
     requestAnimationFrame( () => {
-        updateCurrentlyDisplaying(carousel, carouselContentHolder, 1);
+        updateCurrentIndex(carousel, carouselContentHolder, 1);
         requestAnimationFrame(() => {
             updateLocationOfAdjacentCarouselItems(carousel, carouselContentHolder);
         });
     });
 }
 
-function moveCarouselToLeft(carousel, carouselContentHolder) {
+function slideCarouselItemsToLeft(carousel, carouselContentHolder) {
     resetCarouselAutoplay(carousel, carouselContentHolder);
 
     const carouselChildren = carouselContentHolder.children;
-    carouselChildren[getIncrementOfCurrentlyDisplaying(carousel, carouselContentHolder,-1)].classList.remove("hidden");
+    carouselChildren[getCurrentIndexPlusNumber(carousel, carouselContentHolder,-1)].classList.remove("hidden");
 
     requestAnimationFrame( () => {
-        updateCurrentlyDisplaying(carousel, carouselContentHolder, -1);
+        updateCurrentIndex(carousel, carouselContentHolder, -1);
 
         requestAnimationFrame(() => {
             updateLocationOfAdjacentCarouselItems(carousel, carouselContentHolder);
@@ -100,8 +100,8 @@ function moveCarouselToLeft(carousel, carouselContentHolder) {
     });
 }
 
-function getIncrementOfCurrentlyDisplaying(carousel, carouselContentHolder, number) {
-    const currentIndexNumber = parseInt(carousel.dataset.currentlyDisplaying);
+function getCurrentIndexPlusNumber(carousel, carouselContentHolder, number) {
+    const currentIndexNumber = parseInt(carousel.dataset.currentIndex);
     const totalAmountOfItems = carouselContentHolder.children.length;
 
     if (!ALLOW_CAROUSEL_CYCLE && (currentIndexNumber === 0 || currentIndexNumber === totalAmountOfItems - 1)) {
@@ -111,24 +111,24 @@ function getIncrementOfCurrentlyDisplaying(carousel, carouselContentHolder, numb
     return ((currentIndexNumber + number + totalAmountOfItems) % totalAmountOfItems);
 }
 
-function updateCurrentlyDisplaying(carousel, carouselContentHolder, number) {
-    carousel.dataset.currentlyDisplaying = getIncrementOfCurrentlyDisplaying(carousel, carouselContentHolder, number).toString();
+function updateCurrentIndex(carousel, carouselContentHolder, number) {
+    carousel.dataset.currentIndex = getCurrentIndexPlusNumber(carousel, carouselContentHolder, number).toString();
 }
 
 function updateLocationOfAdjacentCarouselItems(carousel, carouselContentHolder){
-    const currentlyDisplaying = parseInt(carousel.dataset.currentlyDisplaying);
-    const rightItemIndex = getIncrementOfCurrentlyDisplaying(carousel, carouselContentHolder, 1);
-    const leftItemIndex = getIncrementOfCurrentlyDisplaying(carousel, carouselContentHolder, -1);
+    const currentIndex = parseInt(carousel.dataset.currentIndex);
+    const rightItemIndex = getCurrentIndexPlusNumber(carousel, carouselContentHolder, 1);
+    const leftItemIndex = getCurrentIndexPlusNumber(carousel, carouselContentHolder, -1);
 
     carouselContentHolder.children[rightItemIndex].style.left = "150%";
-    carouselContentHolder.children[currentlyDisplaying].style.left = "50%";
+    carouselContentHolder.children[currentIndex].style.left = "50%";
     carouselContentHolder.children[leftItemIndex].style.left = "-50%";
 }
 
 function hideAdjacentCarouselItems(carousel, carouselContentHolder) {
-    const rightItemIndex = getIncrementOfCurrentlyDisplaying(carousel, carouselContentHolder, 1);
-    const currentItemIndex = getIncrementOfCurrentlyDisplaying(carousel, carouselContentHolder, 0);
-    const leftItemIndex = getIncrementOfCurrentlyDisplaying(carousel,carouselContentHolder, -1);
+    const rightItemIndex = getCurrentIndexPlusNumber(carousel, carouselContentHolder, 1);
+    const currentItemIndex = getCurrentIndexPlusNumber(carousel, carouselContentHolder, 0);
+    const leftItemIndex = getCurrentIndexPlusNumber(carousel,carouselContentHolder, -1);
 
     carouselContentHolder.children[rightItemIndex].classList.add("hidden");
     carouselContentHolder.children[currentItemIndex].classList.remove("hidden");
@@ -138,7 +138,7 @@ function hideAdjacentCarouselItems(carousel, carouselContentHolder) {
 function resetCarouselAutoplay(carousel, carouselContentHolder) {
     clearInterval(carouselAutoplayIntervalMap.get(carousel));
     carouselAutoplayIntervalMap.set(carousel, setInterval(() => {
-        moveCarouselToRight(carousel, carouselContentHolder);
+        slideCarouselItemsToRight(carousel, carouselContentHolder);
     }, AUTOPLAY_TIME_IN_MILLISECONDS));
 }
 

@@ -1,12 +1,12 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-}
-
-* {
-    box-sizing: border-box;
 }
 
 .carousel {
@@ -46,10 +46,10 @@ body {
     left: 50%;
 
     transition: 1s ease-in-out;
-}
 
-.carousel-content-holder > .hidden {
-    display: none;
+    > .hidden {
+        display: none;
+    }
 }
 
 .carousel-dot-holder {
@@ -64,12 +64,12 @@ body {
     min-width: 3em;
     border-radius: 0;
     background-color: cadetblue;
-}
 
-.carousel-button:hover {
-    background-color: aquamarine;
-}
+    &:hover {
+        background-color: aquamarine;
+    }
 
-.carousel-button:active {
-    background-color: aqua;
+    &:active {
+        background-color: aqua;
+    }
 }
