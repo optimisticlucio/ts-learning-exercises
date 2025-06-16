@@ -10,7 +10,9 @@ body {
 }
 
 .carousel {
-
+    background-color: beige;
+    border: .5ch solid olive;
+    padding: 1ch;
 }
 
 .carousel-title {
@@ -22,6 +24,8 @@ body {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+
+    background-color: white;
 }
 
 .carousel-content-holder {
@@ -33,19 +37,19 @@ body {
 
     display: flex;
     justify-content: space-around;
-}
 
-.carousel-content-holder > * {
-    max-width: 90%;
-    max-height: 100%;
-    width: max-content;
+    > * {
+        max-width: 90%;
+        max-height: 100%;
+        width: max-content;
 
-    position: absolute;
-    transform: translate(-50%, -50%);
-    top: 50%;
-    left: 50%;
+        position: absolute;
+        transform: translate(-50%, -50%);
+        top: 50%;
+        left: 50%;
 
-    transition: 1s ease-in-out;
+        transition: 1s ease-in-out;
+    }
 
     > .hidden {
         display: none;

@@ -12,5 +12,28 @@
         <img alt="A gif of a dog sniffing the camera" src="assets/dog-sniffing.gif">
         <video src="assets/waffle_falling_over.mp4" controls></video>
     </div>
+
+    <script>
+        async function getACoolRandomFact() {
+            // Gets a cool random fact from uselessfacts.jsph.pl
+            try {
+                const fetchResponse = await fetch("https://uselessfacts.jsph.pl/api/v2/facts/random");
+                const fetchJson = await fetchResponse.json();
+                return fetchJson["text"];
+            } catch (error) {
+                console.log(error);
+                return "Failed to fetch facts.";
+            }
+        }
+
+        async function loadFacts() {
+            const randomFactPromises = Array.from({ length: 10 }, getACoolRandomFact);
+            return await Promise.all(randomFactPromises);
+        }
+
+        loadFacts().then(facts => {
+            console.log(facts);
+        });
+    </script>
 </body>
 </html>

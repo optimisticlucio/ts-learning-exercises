@@ -3,53 +3,62 @@ const AUTOPLAY_TIME_IN_MILLISECONDS = 6000;
 
 const carouselAutoplayIntervalMap = new Map();
 
+function createCarousel(carouselName, ...carouselItems) {
+    const carousel = document.createElement("div");
+    carousel.classList.add("carousel");
+
+    const carouselTitle = document.createElement("h1");
+    carouselTitle.classList.add("carousel-title");
+    carouselTitle.innerText = carouselName ?? "Carousel Title Missing";
+
+    const carouselContentHolder = generateCarouselContentHolder(carouselItems);
+    const carouselLeftButton = document.createElement("button");
+    carouselLeftButton.classList.add("carousel-button");
+    carouselLeftButton.addEventListener("click", (e) => {
+        slideCarouselItemsToLeft(carousel, carouselContentHolder);
+    });
+    const carouselRightButton = document.createElement("button");
+    carouselRightButton.classList.add("carousel-button");
+    carouselRightButton.addEventListener("click", (e) => {
+        slideCarouselItemsToRight(carousel, carouselContentHolder);
+    });
+
+    carousel.addEventListener("keydown", (event) => {
+        if (event.key === "ArrowRight") {
+            slideCarouselItemsToRight(carousel, carouselContentHolder);
+        }
+        else if (event.key === "ArrowLeft") {
+            slideCarouselItemsToLeft(carousel, carouselContentHolder);
+        }
+    });
+
+    const carouselContentAndButtons = document.createElement("div");
+    carouselContentAndButtons.classList.add("carousel-content-and-buttons");
+    carouselContentAndButtons.append(carouselLeftButton, carouselContentHolder, carouselRightButton);
+
+    // TODO: Implement generateCarouselDotHolder and connect
+
+    carousel.dataset.currentIndex = "0";
+    hideAdjacentCarouselItems(carousel, carouselContentHolder);
+    updateLocationOfAdjacentCarouselItems(carousel, carouselContentHolder);
+
+    carousel.addEventListener("transitionend", () => hideAdjacentCarouselItems(carousel, carouselContentHolder));
+
+    carouselAutoplayIntervalMap.set(carousel, setInterval(() => {
+        slideCarouselItemsToRight(carousel, carouselContentHolder);
+    }, AUTOPLAY_TIME_IN_MILLISECONDS));
+
+    carousel.append(carouselTitle, carouselContentAndButtons)
+
+    return carousel;
+}
+
 // Goes over all items with the carousel class and turns them to proper carousels.
 function generateCarousels() {
     const carousels = Array.from(document.querySelectorAll('.carousel'));
 
     for (let carousel of carousels) {
-        const carouselTitle = document.createElement("h1");
-        carouselTitle.classList.add("carousel-title");
-        carouselTitle.innerText = carousel.dataset.title ?? "Carousel Title Missing";
-
-        const carouselContentHolder = generateCarouselContentHolder(Array.from(carousel.children));
-        const carouselLeftButton = document.createElement("button");
-        carouselLeftButton.classList.add("carousel-button");
-        carouselLeftButton.addEventListener("click", (e) => {
-            slideCarouselItemsToLeft(carousel, carouselContentHolder);
-        });
-        const carouselRightButton = document.createElement("button");
-        carouselRightButton.classList.add("carousel-button");
-        carouselRightButton.addEventListener("click", (e) => {
-            slideCarouselItemsToRight(carousel, carouselContentHolder);
-        });
-
-        carousel.addEventListener("keydown", (event) => {
-            if (event.key === "ArrowRight") {
-                slideCarouselItemsToRight(carousel, carouselContentHolder);
-            }
-            else if (event.key === "ArrowLeft") {
-                slideCarouselItemsToLeft(carousel, carouselContentHolder);
-            }
-        });
-
-        const carouselContentAndButtons = document.createElement("div");
-        carouselContentAndButtons.classList.add("carousel-content-and-buttons");
-        carouselContentAndButtons.append(carouselLeftButton, carouselContentHolder, carouselRightButton);
-
-        // TODO: Implement generateCarouselDotHolder and connect
-
-        carousel.dataset.currentIndex = "0";
-        hideAdjacentCarouselItems(carousel, carouselContentHolder);
-        updateLocationOfAdjacentCarouselItems(carousel, carouselContentHolder);
-
-        carousel.addEventListener("transitionend", () => hideAdjacentCarouselItems(carousel, carouselContentHolder));
-
-        carouselAutoplayIntervalMap.set(carousel, setInterval(() => {
-            slideCarouselItemsToRight(carousel, carouselContentHolder);
-        }, AUTOPLAY_TIME_IN_MILLISECONDS));
-
-        carousel.append(carouselTitle, carouselContentAndButtons)
+        carousel.replaceWith(createCarousel(carousel.dataset.title, ...Array.from(carousel.children)));
     }
 }
 
