@@ -32,7 +32,13 @@
         }
 
         loadFacts().then(facts => {
-            console.log(facts);
+            const factElements = facts.map(fact => {
+                const element = document.createElement("p");
+                element.textContent = fact;
+                return element;
+            });
+            const carousel = createCarousel("Cool Random Facts", ...factElements);
+            document.body.append(carousel);
         });
     </script>
 </body>

@@ -13,6 +13,7 @@ body {
     background-color: beige;
     border: .5ch solid olive;
     padding: 1ch;
+    margin: 1em;
 }
 
 .carousel-title {
