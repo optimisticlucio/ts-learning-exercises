@@ -63,6 +63,17 @@ body {
     justify-content: center;
     align-items: center;
     gap: 2ch;
+    margin: 1ch;
+}
+
+.carousel-dot {
+    content: '';
+    border-radius: 50%;
+    border: 1.5ch solid gray;
+
+    &.selected {
+        border-color: black;
+    }
 }
 
 .carousel-button {

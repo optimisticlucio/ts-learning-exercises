@@ -36,13 +36,14 @@ function createCarousel(carouselName, ...carouselItems) {
     carouselContentAndButtons.classList.add("carousel-content-and-buttons");
     carouselContentAndButtons.append(carouselLeftButton, carouselContentHolder, carouselRightButton);
 
-    carousel.append(carouselTitle, carouselContentAndButtons);
+    const carouselDotHolder = generateCarouselDotHolder(carouselItems.length);
 
-    // TODO: Implement generateCarouselDotHolder and connect
+    carousel.append(carouselTitle, carouselContentAndButtons, carouselDotHolder);
 
     carousel.dataset.currentIndex = "0";
     hideAdjacentCarouselItems(carousel);
     updateLocationOfAdjacentCarouselItems(carousel);
+    updateCarouselDots(carousel);
 
     carousel.addEventListener("transitionend", () => hideAdjacentCarouselItems(carousel, carouselContentHolder));
 
@@ -68,7 +69,6 @@ function generateCarouselContentHolder(carouselContents) {
     carouselContentHolder.append(...carouselContents);
 
     carouselContents.forEach((carouselItem) => {
-       // TODO
         carouselItem.classList.add("hidden");
     });
 
@@ -76,7 +76,25 @@ function generateCarouselContentHolder(carouselContents) {
 }
 
 function generateCarouselDotHolder(amountOfDots) {
-    // TODO: implement
+    const carouselDotHolder = document.createElement("div");
+    carouselDotHolder.classList.add("carousel-dot-holder");
+
+    const carouselDot = document.createElement("div");
+    carouselDot.classList.add("carousel-dot");
+
+    for (let i = 0; i < amountOfDots; i++) {
+        carouselDotHolder.append(carouselDot.cloneNode());
+    }
+
+    return carouselDotHolder;
+}
+
+function updateCarouselDots(carousel) {
+    const currentIndexNumber = parseInt(carousel.dataset.currentIndex);
+    const carouselDotHolder = carousel.getElementsByClassName("carousel-dot-holder")[0];
+    const carouselDots = Array.from(carouselDotHolder.children);
+    carouselDots.forEach((carouselItem) => carouselItem.classList.remove("selected"));
+    carouselDots[currentIndexNumber].classList.add("selected");
 }
 
 function slideCarouselItemsToRight(carousel) {
@@ -91,6 +109,7 @@ function slideCarouselItemsToRight(carousel) {
         updateCurrentIndex(carousel, 1);
         requestAnimationFrame(() => {
             updateLocationOfAdjacentCarouselItems(carousel);
+            updateCarouselDots(carousel);
         });
     });
 }
@@ -107,6 +126,7 @@ function slideCarouselItemsToLeft(carousel) {
 
         requestAnimationFrame(() => {
             updateLocationOfAdjacentCarouselItems(carousel);
+            updateCarouselDots(carousel);
         });
     });
 }
