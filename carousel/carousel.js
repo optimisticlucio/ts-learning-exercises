@@ -15,20 +15,20 @@ function createCarousel(carouselName, ...carouselItems) {
     const carouselLeftButton = document.createElement("button");
     carouselLeftButton.classList.add("carousel-button");
     carouselLeftButton.addEventListener("click", (e) => {
-        slideCarouselItemsToLeft(carousel, carouselContentHolder);
+        slideCarouselItemsToLeft(carousel);
     });
     const carouselRightButton = document.createElement("button");
     carouselRightButton.classList.add("carousel-button");
     carouselRightButton.addEventListener("click", (e) => {
-        slideCarouselItemsToRight(carousel, carouselContentHolder);
+        slideCarouselItemsToRight(carousel);
     });
 
     carousel.addEventListener("keydown", (event) => {
         if (event.key === "ArrowRight") {
-            slideCarouselItemsToRight(carousel, carouselContentHolder);
+            slideCarouselItemsToRight(carousel);
         }
         else if (event.key === "ArrowLeft") {
-            slideCarouselItemsToLeft(carousel, carouselContentHolder);
+            slideCarouselItemsToLeft(carousel);
         }
     });
 
@@ -36,19 +36,19 @@ function createCarousel(carouselName, ...carouselItems) {
     carouselContentAndButtons.classList.add("carousel-content-and-buttons");
     carouselContentAndButtons.append(carouselLeftButton, carouselContentHolder, carouselRightButton);
 
+    carousel.append(carouselTitle, carouselContentAndButtons);
+
     // TODO: Implement generateCarouselDotHolder and connect
 
     carousel.dataset.currentIndex = "0";
-    hideAdjacentCarouselItems(carousel, carouselContentHolder);
-    updateLocationOfAdjacentCarouselItems(carousel, carouselContentHolder);
+    hideAdjacentCarouselItems(carousel);
+    updateLocationOfAdjacentCarouselItems(carousel);
 
     carousel.addEventListener("transitionend", () => hideAdjacentCarouselItems(carousel, carouselContentHolder));
 
     carouselAutoplayIntervalMap.set(carousel, setInterval(() => {
-        slideCarouselItemsToRight(carousel, carouselContentHolder);
+        slideCarouselItemsToRight(carousel);
     }, AUTOPLAY_TIME_IN_MILLISECONDS));
-
-    carousel.append(carouselTitle, carouselContentAndButtons)
 
     return carousel;
 }
@@ -79,38 +79,41 @@ function generateCarouselDotHolder(amountOfDots) {
     // TODO: implement
 }
 
-function slideCarouselItemsToRight(carousel, carouselContentHolder) {
-    resetCarouselAutoplay(carousel, carouselContentHolder);
+function slideCarouselItemsToRight(carousel) {
+    resetCarouselAutoplay(carousel);
 
+    const carouselContentHolder = carousel.getElementsByClassName("carousel-content-holder")[0];
     const carouselChildren = carouselContentHolder.children;
-    carouselChildren[getCurrentIndexPlusNumber(carousel, carouselContentHolder,1)].classList.remove("hidden");
+    carouselChildren[getCurrentIndexPlusNumber(carousel,1)].classList.remove("hidden");
 
     // Nested animation frames to assure css animates the transition properly.
     requestAnimationFrame( () => {
-        updateCurrentIndex(carousel, carouselContentHolder, 1);
+        updateCurrentIndex(carousel, 1);
         requestAnimationFrame(() => {
-            updateLocationOfAdjacentCarouselItems(carousel, carouselContentHolder);
+            updateLocationOfAdjacentCarouselItems(carousel);
         });
     });
 }
 
-function slideCarouselItemsToLeft(carousel, carouselContentHolder) {
-    resetCarouselAutoplay(carousel, carouselContentHolder);
+function slideCarouselItemsToLeft(carousel) {
+    resetCarouselAutoplay(carousel);
 
+    const carouselContentHolder = carousel.getElementsByClassName("carousel-content-holder")[0];
     const carouselChildren = carouselContentHolder.children;
-    carouselChildren[getCurrentIndexPlusNumber(carousel, carouselContentHolder,-1)].classList.remove("hidden");
+    carouselChildren[getCurrentIndexPlusNumber(carousel,-1)].classList.remove("hidden");
 
     requestAnimationFrame( () => {
-        updateCurrentIndex(carousel, carouselContentHolder, -1);
+        updateCurrentIndex(carousel, -1);
 
         requestAnimationFrame(() => {
-            updateLocationOfAdjacentCarouselItems(carousel, carouselContentHolder);
+            updateLocationOfAdjacentCarouselItems(carousel);
         });
     });
 }
 
-function getCurrentIndexPlusNumber(carousel, carouselContentHolder, number) {
+function getCurrentIndexPlusNumber(carousel, number) {
     const currentIndexNumber = parseInt(carousel.dataset.currentIndex);
+    const carouselContentHolder = carousel.getElementsByClassName("carousel-content-holder")[0];
     const totalAmountOfItems = carouselContentHolder.children.length;
 
     if (!ALLOW_CAROUSEL_CYCLE && (currentIndexNumber === 0 || currentIndexNumber === totalAmountOfItems - 1)) {
@@ -120,34 +123,36 @@ function getCurrentIndexPlusNumber(carousel, carouselContentHolder, number) {
     return ((currentIndexNumber + number + totalAmountOfItems) % totalAmountOfItems);
 }
 
-function updateCurrentIndex(carousel, carouselContentHolder, number) {
-    carousel.dataset.currentIndex = getCurrentIndexPlusNumber(carousel, carouselContentHolder, number).toString();
+function updateCurrentIndex(carousel, number) {
+    carousel.dataset.currentIndex = getCurrentIndexPlusNumber(carousel, number).toString();
 }
 
-function updateLocationOfAdjacentCarouselItems(carousel, carouselContentHolder){
+function updateLocationOfAdjacentCarouselItems(carousel){
     const currentIndex = parseInt(carousel.dataset.currentIndex);
-    const rightItemIndex = getCurrentIndexPlusNumber(carousel, carouselContentHolder, 1);
-    const leftItemIndex = getCurrentIndexPlusNumber(carousel, carouselContentHolder, -1);
+    const rightItemIndex = getCurrentIndexPlusNumber(carousel, 1);
+    const leftItemIndex = getCurrentIndexPlusNumber(carousel, -1);
 
+    const carouselContentHolder = carousel.getElementsByClassName("carousel-content-holder")[0];
     carouselContentHolder.children[rightItemIndex].style.left = "150%";
     carouselContentHolder.children[currentIndex].style.left = "50%";
     carouselContentHolder.children[leftItemIndex].style.left = "-50%";
 }
 
-function hideAdjacentCarouselItems(carousel, carouselContentHolder) {
-    const rightItemIndex = getCurrentIndexPlusNumber(carousel, carouselContentHolder, 1);
-    const currentItemIndex = getCurrentIndexPlusNumber(carousel, carouselContentHolder, 0);
-    const leftItemIndex = getCurrentIndexPlusNumber(carousel,carouselContentHolder, -1);
+function hideAdjacentCarouselItems(carousel) {
+    const rightItemIndex = getCurrentIndexPlusNumber(carousel, 1);
+    const currentItemIndex = getCurrentIndexPlusNumber(carousel, 0);
+    const leftItemIndex = getCurrentIndexPlusNumber(carousel, -1);
 
+    const carouselContentHolder = carousel.getElementsByClassName("carousel-content-holder")[0];
     carouselContentHolder.children[rightItemIndex].classList.add("hidden");
     carouselContentHolder.children[currentItemIndex].classList.remove("hidden");
     carouselContentHolder.children[leftItemIndex].classList.add("hidden");
 }
 
-function resetCarouselAutoplay(carousel, carouselContentHolder) {
+function resetCarouselAutoplay(carousel) {
     clearInterval(carouselAutoplayIntervalMap.get(carousel));
     carouselAutoplayIntervalMap.set(carousel, setInterval(() => {
-        slideCarouselItemsToRight(carousel, carouselContentHolder);
+        slideCarouselItemsToRight(carousel);
     }, AUTOPLAY_TIME_IN_MILLISECONDS));
 }
 
