@@ -1,15 +1,38 @@
-const ALLOW_CAROUSEL_CYCLE = true;
-const AUTOPLAY_TIME_IN_MILLISECONDS = 6000;
-
 const carouselAutoplayIntervalMap = new Map();
 
-function createCarousel(carouselName, ...carouselItems) {
+/*
+    CarouselOptions may include:
+        - allowCycle = Boolean. Default is true. Whether the carousel can loop over items or not.
+        - showDots = Boolean. Default is true. Whether the dots are visible.
+        - buttonStyle = String. Additional style to give each button.
+        - carouselStyle = String. Additional style to give the carousel as a whole.
+        - autoplayTimeInMs = Number. Default is 6000. The time for each carousel to autoplay in ms.
+ */
+function createCarousel(carouselName, carouselItems, carouselOptions) {
     const carousel = document.createElement("div");
     carousel.classList.add("carousel");
+
+    if (!carouselOptions) {
+        carouselOptions = {}; // To not have to check for undefined all the time.
+    }
+
+    if ("carouselStyle" in carouselOptions &&
+        typeof carouselOptions.carouselStyle === "string") {
+        carousel.style = carouselOptions.carouselStyle;
+    }
 
     const carouselTitle = document.createElement("h1");
     carouselTitle.classList.add("carousel-title");
     carouselTitle.innerText = carouselName ?? "Carousel Title Missing";
+
+    if ("allowCycle" in carouselOptions &&
+        typeof carouselOptions.allowCycle === "boolean" &&
+        carouselOptions.allowCycle === false) {
+        carousel.dataset.allowCycle = "false";
+    }
+    else {
+        carousel.dataset.allowCycle = "true";
+    }
 
     const carouselContentHolder = generateCarouselContentHolder(carouselItems);
     const carouselLeftButton = document.createElement("button");
@@ -22,6 +45,12 @@ function createCarousel(carouselName, ...carouselItems) {
     carouselRightButton.addEventListener("click", (e) => {
         slideCarouselItemsToRight(carousel);
     });
+
+    if ("buttonStyle" in carouselOptions &&
+        typeof carouselOptions.buttonStyle === "string") {
+        carouselRightButton.style = carouselOptions.buttonStyle;
+        carouselLeftButton.style = carouselOptions.buttonStyle;
+    }
 
     carousel.addEventListener("keydown", (event) => {
         if (event.key === "ArrowRight") {
@@ -38,6 +67,12 @@ function createCarousel(carouselName, ...carouselItems) {
 
     const carouselDotHolder = generateCarouselDotHolder(carouselItems.length);
 
+    if ("showDots" in carouselOptions &&
+        typeof carouselOptions.showDots === "boolean" &&
+        carouselOptions.showDots === false) {
+        carouselDotHolder.style.display = "none";
+    }
+
     carousel.append(carouselTitle, carouselContentAndButtons, carouselDotHolder);
 
     carousel.dataset.currentIndex = "0";
@@ -47,9 +82,15 @@ function createCarousel(carouselName, ...carouselItems) {
 
     carousel.addEventListener("transitionend", () => hideAdjacentCarouselItems(carousel, carouselContentHolder));
 
-    carouselAutoplayIntervalMap.set(carousel, setInterval(() => {
-        slideCarouselItemsToRight(carousel);
-    }, AUTOPLAY_TIME_IN_MILLISECONDS));
+    if ("autoplayTimeInMs" in carouselOptions &&
+        typeof carouselOptions.autoplayTimeInMs === "number") {
+        carousel.dataset.autoplayTimeInMs = carouselOptions.autoplayTimeInMs;
+    }
+    else {
+        carousel.dataset.autoplayTimeInMs = "6000";
+    }
+
+    resetCarouselAutoplay(carousel);
 
     return carousel;
 }
@@ -59,7 +100,7 @@ function generateCarousels() {
     const carousels = Array.from(document.querySelectorAll('.carousel'));
 
     for (let carousel of carousels) {
-        carousel.replaceWith(createCarousel(carousel.dataset.title, ...Array.from(carousel.children)));
+        carousel.replaceWith(createCarousel(carousel.dataset.title, Array.from(carousel.children)));
     }
 }
 
@@ -131,12 +172,15 @@ function slideCarouselItemsToLeft(carousel) {
     });
 }
 
-function getCurrentIndexPlusNumber(carousel, number) {
+function getCurrentIndexPlusNumber(carousel, number, checkAllowCycle = true) {
     const currentIndexNumber = parseInt(carousel.dataset.currentIndex);
     const carouselContentHolder = carousel.getElementsByClassName("carousel-content-holder")[0];
     const totalAmountOfItems = carouselContentHolder.children.length;
 
-    if (!ALLOW_CAROUSEL_CYCLE && (currentIndexNumber === 0 || currentIndexNumber === totalAmountOfItems - 1)) {
+    const ALLOW_CAROUSEL_CYCLE = carousel.dataset.allowCycle === "true";
+
+    if (checkAllowCycle && !ALLOW_CAROUSEL_CYCLE &&
+        (currentIndexNumber + number < 0 || currentIndexNumber + number > totalAmountOfItems)   ) {
         return currentIndexNumber;
     }
 
@@ -149,8 +193,8 @@ function updateCurrentIndex(carousel, number) {
 
 function updateLocationOfAdjacentCarouselItems(carousel){
     const currentIndex = parseInt(carousel.dataset.currentIndex);
-    const rightItemIndex = getCurrentIndexPlusNumber(carousel, 1);
-    const leftItemIndex = getCurrentIndexPlusNumber(carousel, -1);
+    const rightItemIndex = getCurrentIndexPlusNumber(carousel, 1, false);
+    const leftItemIndex = getCurrentIndexPlusNumber(carousel, -1, false);
 
     const carouselContentHolder = carousel.getElementsByClassName("carousel-content-holder")[0];
     carouselContentHolder.children[rightItemIndex].style.left = "150%";
@@ -159,9 +203,9 @@ function updateLocationOfAdjacentCarouselItems(carousel){
 }
 
 function hideAdjacentCarouselItems(carousel) {
-    const rightItemIndex = getCurrentIndexPlusNumber(carousel, 1);
-    const currentItemIndex = getCurrentIndexPlusNumber(carousel, 0);
-    const leftItemIndex = getCurrentIndexPlusNumber(carousel, -1);
+    const rightItemIndex = getCurrentIndexPlusNumber(carousel, 1, false);
+    const currentItemIndex = getCurrentIndexPlusNumber(carousel, 0, false);
+    const leftItemIndex = getCurrentIndexPlusNumber(carousel, -1, false);
 
     const carouselContentHolder = carousel.getElementsByClassName("carousel-content-holder")[0];
     carouselContentHolder.children[rightItemIndex].classList.add("hidden");
@@ -171,9 +215,12 @@ function hideAdjacentCarouselItems(carousel) {
 
 function resetCarouselAutoplay(carousel) {
     clearInterval(carouselAutoplayIntervalMap.get(carousel));
+
+    let autoplayTime = parseInt(carousel.dataset.autoplayTimeInMs);
+
     carouselAutoplayIntervalMap.set(carousel, setInterval(() => {
         slideCarouselItemsToRight(carousel);
-    }, AUTOPLAY_TIME_IN_MILLISECONDS));
+    }, autoplayTime));
 }
 
 document.addEventListener('DOMContentLoaded', () => {
