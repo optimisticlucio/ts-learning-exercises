@@ -8,87 +8,77 @@ const carouselAutoplayIntervalMap = new Map();
         - carouselStyle = String. Additional style to give the carousel as a whole.
         - autoplayTimeInMs = Number. Default is 6000. The time for each carousel to autoplay in ms.
  */
-function createCarousel(carouselName, carouselItems, carouselOptions) {
+function createCarousel(name, items, options = {}) {
     const carousel = document.createElement("div");
     carousel.classList.add("carousel");
 
-    if (!carouselOptions) {
-        carouselOptions = {}; // To not have to check for undefined all the time.
+    if ("carouselStyle" in options &&
+        typeof options.carouselStyle === "string") {
+        carousel.style = options.carouselStyle;
     }
 
-    if ("carouselStyle" in carouselOptions &&
-        typeof carouselOptions.carouselStyle === "string") {
-        carousel.style = carouselOptions.carouselStyle;
-    }
+    const title = document.createElement("h1");
+    title.classList.add("carousel-title");
+    title.innerText = name ?? "Carousel Title Missing";
 
-    const carouselTitle = document.createElement("h1");
-    carouselTitle.classList.add("carousel-title");
-    carouselTitle.innerText = carouselName ?? "Carousel Title Missing";
-
-    if ("allowCycle" in carouselOptions &&
-        typeof carouselOptions.allowCycle === "boolean" &&
-        carouselOptions.allowCycle === false) {
+    if ("allowCycle" in options &&
+        typeof options.allowCycle === "boolean" &&
+        options.allowCycle === false) {
         carousel.dataset.allowCycle = "false";
-    }
-    else {
+    } else {
         carousel.dataset.allowCycle = "true";
     }
 
-    const carouselContentHolder = generateCarouselContentHolder(carouselItems);
-    const carouselLeftButton = document.createElement("button");
-    carouselLeftButton.classList.add("carousel-button");
-    carouselLeftButton.addEventListener("click", (e) => {
+    const contentHolder = generateCarouselContentHolder(items);
+    const leftButton = document.createElement("button");
+    leftButton.classList.add("carousel-button");
+    leftButton.addEventListener("click", (e) => {
         slideCarouselItemsToLeft(carousel);
     });
-    const carouselRightButton = document.createElement("button");
-    carouselRightButton.classList.add("carousel-button");
-    carouselRightButton.addEventListener("click", (e) => {
+    const rightButton = document.createElement("button");
+    rightButton.classList.add("carousel-button");
+    rightButton.addEventListener("click", (e) => {
         slideCarouselItemsToRight(carousel);
     });
 
-    if ("buttonStyle" in carouselOptions &&
-        typeof carouselOptions.buttonStyle === "string") {
-        carouselRightButton.style = carouselOptions.buttonStyle;
-        carouselLeftButton.style = carouselOptions.buttonStyle;
+    if ("buttonStyle" in options &&
+        typeof options.buttonStyle === "string") {
+        rightButton.style = options.buttonStyle;
+        leftButton.style = options.buttonStyle;
     }
 
     carousel.addEventListener("keydown", (event) => {
         if (event.key === "ArrowRight") {
             slideCarouselItemsToRight(carousel);
         }
-        else if (event.key === "ArrowLeft") {
+        if (event.key === "ArrowLeft") {
             slideCarouselItemsToLeft(carousel);
         }
     });
 
-    const carouselContentAndButtons = document.createElement("div");
-    carouselContentAndButtons.classList.add("carousel-content-and-buttons");
-    carouselContentAndButtons.append(carouselLeftButton, carouselContentHolder, carouselRightButton);
+    const contentAndButtons = document.createElement("div");
+    contentAndButtons.classList.add("carousel-content-and-buttons");
+    contentAndButtons.append(leftButton, contentHolder, rightButton);
 
-    const carouselDotHolder = generateCarouselDotHolder(carouselItems.length);
+    const dotHolder = generateCarouselDotHolder(items.length);
 
-    if ("showDots" in carouselOptions &&
-        typeof carouselOptions.showDots === "boolean" &&
-        carouselOptions.showDots === false) {
-        carouselDotHolder.style.display = "none";
+    if ("showDots" in options &&
+        typeof options.showDots === "boolean" &&
+        options.showDots === false) {
+        dotHolder.style.display = "none";
     }
 
-    carousel.append(carouselTitle, carouselContentAndButtons, carouselDotHolder);
+    carousel.append(title, contentAndButtons, dotHolder);
 
     carousel.dataset.currentIndex = "0";
     hideAdjacentCarouselItems(carousel);
     updateLocationOfAdjacentCarouselItems(carousel);
     updateCarouselDots(carousel);
 
-    carousel.addEventListener("transitionend", () => hideAdjacentCarouselItems(carousel, carouselContentHolder));
+    carousel.addEventListener("transitionend", () => hideAdjacentCarouselItems(carousel, contentHolder));
 
-    if ("autoplayTimeInMs" in carouselOptions &&
-        typeof carouselOptions.autoplayTimeInMs === "number") {
-        carousel.dataset.autoplayTimeInMs = carouselOptions.autoplayTimeInMs;
-    }
-    else {
-        carousel.dataset.autoplayTimeInMs = "6000";
-    }
+    const autoPlayTimeInMs = parseInt(options.autoplayTimeInMs) || 6_000;
+    carousel.dataset.autoplayTimeInMs = String(autoPlayTimeInMs);
 
     resetCarouselAutoplay(carousel);
 
@@ -131,11 +121,11 @@ function generateCarouselDotHolder(amountOfDots) {
 }
 
 function updateCarouselDots(carousel) {
-    const currentIndexNumber = parseInt(carousel.dataset.currentIndex);
+    const currentIndex = parseInt(carousel.dataset.currentIndex);
     const carouselDotHolder = carousel.getElementsByClassName("carousel-dot-holder")[0];
     const carouselDots = Array.from(carouselDotHolder.children);
     carouselDots.forEach((carouselItem) => carouselItem.classList.remove("selected"));
-    carouselDots[currentIndexNumber].classList.add("selected");
+    carouselDots[currentIndex].classList.add("selected");
 }
 
 function slideCarouselItemsToRight(carousel) {
