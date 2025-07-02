@@ -1,0 +1,91 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.carousel {
+    background-color: beige;
+    border: .5ch solid olive;
+    padding: 1ch;
+    margin: 1em;
+}
+
+.carousel-title {
+    text-align: center;
+    font-family: 'Impact', sans-serif;
+}
+
+.carousel-content-and-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    background-color: white;
+}
+
+.carousel-content-holder {
+    width: 30em;
+    height: 20em;
+    overflow: hidden;
+
+    position: relative;
+
+    display: flex;
+    justify-content: space-around;
+
+    > * {
+        max-width: 90%;
+        max-height: 100%;
+        width: max-content;
+
+        position: absolute;
+        transform: translate(-50%, -50%);
+        top: 50%;
+        left: 50%;
+
+        transition: 1s ease-in-out;
+    }
+
+    > .hidden {
+        display: none;
+    }
+}
+
+.carousel-dot-holder {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 2ch;
+    margin: 1ch;
+}
+
+.carousel-dot {
+    content: '';
+    border-radius: 50%;
+    border: 1.5ch solid gray;
+
+    &.selected {
+        border-color: black;
+    }
+}
+
+.carousel-button {
+    min-width: 3em;
+    border-radius: 0;
+    background-color: cadetblue;
+
+    &:hover {
+        background-color: aquamarine;
+    }
+
+    &:active {
+        background-color: aqua;
+    }
+}
