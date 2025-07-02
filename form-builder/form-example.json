@@ -1,0 +1,30 @@
+[
+  {
+    "type": "title",
+    "content": "Example Form"
+  },
+  {
+    "type": "paragraph",
+    "content": "This is a form made to show off the form creator definition."
+  },
+  {
+    "type": "horizontal-line"
+  },
+  {
+    "type": "text",
+    "title": "Tell me what you think about this:",
+    "id": "text-opinion",
+    "long": true
+  },
+  {
+    "type": "number",
+    "title": "Rate this form builder!",
+    "min": 1,
+    "max": 5,
+    "bar": true
+  },
+  {
+    "type": "send",
+    "content": "Finish!"
+  }
+]
