@@ -13,18 +13,21 @@ Every item has the following customization options:
 The available item types, and their contents, are:
     - "text": representing a short text input.
         Customization options are:
+        -   variant, a string which expects one of several options for decorative purposes:
+            - "short", the default, representing the standard text input form.
+            - "long" / "area", representing the textarea input form which allows for longer text input.
         -   title, a string which is shown on the left of the text input. Default is "Text Input".
         -   id, a string which'll be the id for the sent data of this section.
-        -   long, a boolean value which, if true, turns this into a long-form text input. Default is false.
         -   default, a string which'll be the default value of the text when the page is loaded. Default is empty.
-    - "send": representing the send form button. Only one of these can be in the form.
+    - "submit": representing the submit form button. Only one of these can be in the form.
         Customization options are:
-        -   content, a string which'll be shown on the button itself.
+        -   label, a string which'll be shown on the button itself.
         -   target, a string representing the URL which the form data is sent to.
     - "choice": representing radio/multiple-choice buttons.
         Customization options are:
-        -   multi-choice, a boolean which, if true, turns the contents from radio-buttons to multi-choice buttons.
-            Default is false.
+        -   variant, a string which expects one of several options for decorative purposes:
+            - "radio", the default option, representing a single-choice list.
+            - "multi", representing a multi-choice list.
         -   options, an array of strings which represents the options presented to the user.
         -   id, a string which'll be the id for the sent data of this section.
         -   default, a string which represents a single option that's pre-selected on page load. Default is empty.
@@ -38,7 +41,9 @@ The available item types, and their contents, are:
         No customization options.
     -   "number": representing an input that only accepts numerical options.
         Customization options are:
-        -   bar, a bool that, if set to true, allows inputs as a range bar. Default is false.
+        -   variant, a string which expects one of several options for decorative purposes:
+            - "text", the default, representing an input form where the user can write the number.
+            - "range", representing the range element which accepts inputs visually.
         -   min, a number representing the minimal value the user can input. Default is 0.
         -   max, a number representing the maximal value the user can input. Default is 10.
         -   step, a number representing how far away the "options" for inputs are. Default is 1.
