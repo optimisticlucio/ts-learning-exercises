@@ -38,7 +38,7 @@ Customization options are:
 -   "paragraph": representing a block of normally-formatted text between the form items.
 Customization options are:
       -   content, a string which represents the item's text.
--   horizontal-line: representing a horizontal line across the form.
+-   "horizontal-line": representing a horizontal line across the form.
 No customization options.
 -   "number": representing an input that only accepts numerical options.
 Customization options are:
