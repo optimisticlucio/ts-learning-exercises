@@ -48,7 +48,22 @@ function formTextInput(item) {
 }
 
 function formSubmitButton(item) {
-    // TODO
+    assureFieldExistsAndIsString(item.label, 'Title', 'label');
+
+    let submitTarget = item.target;
+    if (typeof submitTarget !== 'string') {
+       submitTarget = null;
+    }
+
+    let submitButton = document.createElement('input');
+    submitButton.setAttribute('type', 'submit');
+    submitButton.setAttribute('value', submitTarget.label);
+
+    if (submitTarget) {
+        submitButton.setAttribute('formtarget', submitTarget);
+    }
+
+    return submitButton;
 }
 
 function formChoiceOption(item) {
@@ -56,13 +71,33 @@ function formChoiceOption(item) {
 }
 
 function formTitle(item) {
-    // TODO
+    assureFieldExistsAndIsString(item.content, 'Title', 'content');
+
+    let title = document.createElement("h3");
+    title.innerText = item.content;
+
+    return title;
 }
 
 function formParagraph(item) {
-    // TODO
+    assureFieldExistsAndIsString(item.content, 'Paragraph', 'content');
+
+    let paragraph = document.createElement("p");
+    paragraph.innerText = item.content;
+
+    return paragraph;
 }
 
 function formNumberInput(item) {
     // TODO
+}
+
+function assureFieldExistsAndIsString(variable, nameOfFormItem, nameOfField) {
+    if (!variable) {
+        throw new Error(`${nameOfFormItem}'s ${nameOfField} field is missing!`);
+    }
+
+    if (typeof (variable) !== 'string') {
+        throw new Error(`${nameOfFormItem}'s ${nameOfField} field is not a string!`);
+    }
 }
