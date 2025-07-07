@@ -12,19 +12,25 @@
   },
   {
     "type": "text",
+    "variant": "area",
     "title": "Tell me what you think about this:",
-    "id": "text-opinion",
-    "long": true
+    "id": "text-opinion"
   },
   {
     "type": "number",
+    "variant": "range",
     "title": "Rate this form builder!",
     "min": 1,
-    "max": 5,
-    "bar": true
+    "max": 5
   },
   {
-    "type": "send",
-    "content": "Finish!"
+    "type": "choice",
+    "variant": "radio",
+    "title": "Which language do you prefer?",
+    "options": ["JS", "C#", "Python", "Lua"]
+  },
+  {
+    "type": "submit",
+    "label": "Finish!"
   }
 ]
