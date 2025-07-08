@@ -16,7 +16,7 @@ Customization options are:
   -   variant, a string which expects one of several options for decorative purposes:
       - "short", the default, representing the standard text input form.
       - "long" / "area", representing the textarea input form which allows for longer text input.
-  -   title, a string which is shown on the left of the text input. Default is "Text Input".
+  -   title, a string which is shown on the left of the text input.
   -   id, a string which'll be the id for the sent data of this section.
   -   default, a string which'll be the default value of the text when the page is loaded. Default is empty.
 - "submit": representing the submit form button. Only one of these can be in the form.
@@ -31,7 +31,6 @@ Customization options are:
   -   title, a string which is shown above the options. Default is "Select Option".
   -   options, an array of strings which represents the options presented to the user.
   -   id, a string which'll be the id for the sent data of this section.
-  -   default, a string which represents a single option that's pre-selected on page load. Default is empty.
 -   "title": representing a large text item that cannot be modified.
 Customization options are:
       -   content, a string which represents the item's text.
@@ -45,6 +44,7 @@ Customization options are:
     -   variant, a string which expects one of several options for decorative purposes:
           - "text", the default, representing an input form where the user can write the number.
           - "range", representing the range element which accepts inputs visually.
+    -   title, a string which is shown on the left of the text input.
     -   min, a number representing the minimal value the user can input. Default is 0.
     -   max, a number representing the maximal value the user can input. Default is 10.
     -   step, a number representing how far away the "options" for inputs are. Default is 1.

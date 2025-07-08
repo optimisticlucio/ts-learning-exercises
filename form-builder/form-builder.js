@@ -1,7 +1,7 @@
-function buildForm (formArray){
+function buildForm(formArray){
     const form = document.createElement('form');
 
-    const formContents = formArray.map(handleFormContents);
+    const formContents = formArray.flatMap(handleFormContents);
     form.append(...formContents);
 
     return form;
@@ -40,11 +40,58 @@ function handleFormContents(item) {
             throw new Error(`Invalid form item type: ${item.type} is not a recognized item type!`);
     }
 
-    return formItem;
+    formItem = Array.isArray(formItem) ? formItem : [formItem];
+    formItem.append(document.createElement("br"));
+
+    return formItem.slice(0, -1);
 }
 
 function formTextInput(item) {
-    // TODO
+    let arrayOfItems = [];
+
+    if (item.text) {
+        let label = document.createElement("label");
+        label.innerText = item.text;
+
+        if (item.id) {
+            label.setAttribute("for", item.id);
+        }
+
+        arrayOfItems.push(label);
+        arrayOfItems.push(document.createElement("br"));
+    }
+
+    let textInput;
+
+    switch (item.variant) {
+        case undefined:
+        case null:
+        case "short":
+            textInput = document.createElement("input");
+            textInput.setAttribute("type", "text");
+            break;
+
+        case "long":
+        case "area":
+            textInput = document.createElement("textarea");
+            break;
+
+        default:
+            throw new Error(`Text Input received an invalid variant type: ${item.variant}`);
+    }
+
+    if (item.default) {
+        textInput.value = item.default;
+    }
+
+    if (item.id) {
+        textInput.setAttribute("id", item.id);
+        textInput.setAttribute("name", item.id);
+    }
+
+    arrayOfItems.push(textInput);
+
+    return arrayOfItems;
 }
 
 function formSubmitButton(item) {
@@ -67,7 +114,51 @@ function formSubmitButton(item) {
 }
 
 function formChoiceOption(item) {
-    // TODO
+    let fieldset = document.createElement("fieldset");
+
+    let legend = document.createElement("legend");
+    legend.innerText = item.title || "Select Option";
+    fieldset.append(legend);
+
+    let itemType;
+
+    switch (item.variant) {
+        case undefined:
+        case null:
+        case "radio":
+            itemType = "radio";
+            break;
+
+        case "multi":
+            itemType = "checkbox";
+            break;
+
+        default:
+            throw new Error(`Choice Option received an invalid variant type: ${item.variant}`);
+    }
+
+    let options = item.options.flatMap((option) => {
+        let optionArray = [];
+
+        let optionInput = document.createElement("input");
+        optionInput.setAttribute("type", itemType);
+
+        let optionLabel = document.createElement("label");
+
+        let optionId = option.replaceAll(" ", "-").toLowerCase();
+        optionInput.setAttribute("id", optionId);
+        optionInput.setAttribute("name", optionId);
+        optionLabel.setAttribute("for", optionId);
+
+        optionArray.push(optionInput, optionLabel,
+            document.createElement("br"));
+
+        return optionArray;
+    }).slice(0, -1);
+
+    fieldset.append(...options);
+
+    return fieldset;
 }
 
 function formTitle(item) {
@@ -89,7 +180,50 @@ function formParagraph(item) {
 }
 
 function formNumberInput(item) {
-    // TODO
+    let arrayOfItems = [];
+
+    if (item.text) {
+        let label = document.createElement("label");
+        label.innerText = item.text;
+
+        if (item.id) {
+            label.setAttribute("for", item.id);
+        }
+
+        arrayOfItems.push(label);
+        arrayOfItems.push(document.createElement("br"));
+    }
+
+    let numberInput;
+
+    switch (item.variant) {
+        case undefined:
+        case null:
+        case "text":
+            numberInput = document.createElement("input");
+            numberInput.setAttribute("type", "number");
+            break;
+
+        case "range":
+            numberInput = document.createElement("input");
+            numberInput.setAttribute("type", "range");
+            break;
+
+        default:
+            throw new Error(`Number Input received an invalid variant type: ${item.variant}`);
+    }
+
+    if (item.default) {
+        numberInput.value = item.default;
+    }
+
+    numberInput.setAttribute("min", item.min || 0);
+    numberInput.setAttribute("max", item.max || 10);
+    numberInput.setAttribute("step", item.step || 1);
+
+    arrayOfItems.append(numberInput);
+
+    return arrayOfItems;
 }
 
 function assureFieldExistsAndIsString(variable, nameOfFormItem, nameOfField) {
