@@ -6,8 +6,12 @@
     <script src="form-builder.js"></script>
 </head>
 <body>
-    <script>
-        const form = buildForm(JSON.parse("form-example.json"));
+    <script type="module">
+        import json_content from "./form-example.json" with { type: "json" };
+
+        console.log(json_content);
+
+        const form = buildForm(json_content);
 
         document.body.appendChild(form);
     </script>

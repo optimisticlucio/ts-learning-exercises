@@ -20,6 +20,7 @@
     "type": "number",
     "variant": "range",
     "title": "Rate this form builder!",
+    "id": "form-builder-rating",
     "min": 1,
     "max": 5
   },

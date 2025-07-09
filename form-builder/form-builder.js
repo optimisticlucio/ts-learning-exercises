@@ -41,17 +41,16 @@ function handleFormContents(item) {
     }
 
     formItem = Array.isArray(formItem) ? formItem : [formItem];
-    formItem.append(document.createElement("br"));
 
-    return formItem.slice(0, -1);
+    return formItem;
 }
 
 function formTextInput(item) {
     let arrayOfItems = [];
 
-    if (item.text) {
+    if (item.title) {
         let label = document.createElement("label");
-        label.innerText = item.text;
+        label.innerText = item.title;
 
         if (item.id) {
             label.setAttribute("for", item.id);
@@ -90,6 +89,7 @@ function formTextInput(item) {
     }
 
     arrayOfItems.push(textInput);
+    arrayOfItems.push(document.createElement("br"));
 
     return arrayOfItems;
 }
@@ -104,13 +104,16 @@ function formSubmitButton(item) {
 
     let submitButton = document.createElement('input');
     submitButton.setAttribute('type', 'submit');
-    submitButton.setAttribute('value', submitTarget.label);
+
+    if (submitTarget){
+        submitButton.setAttribute('value', submitTarget.label);
+    }
 
     if (submitTarget) {
         submitButton.setAttribute('formtarget', submitTarget);
     }
 
-    return submitButton;
+    return [submitButton, document.createElement('br')];
 }
 
 function formChoiceOption(item) {
@@ -144,6 +147,7 @@ function formChoiceOption(item) {
         optionInput.setAttribute("type", itemType);
 
         let optionLabel = document.createElement("label");
+        optionLabel.innerText = option;
 
         let optionId = option.replaceAll(" ", "-").toLowerCase();
         optionInput.setAttribute("id", optionId);
@@ -158,7 +162,7 @@ function formChoiceOption(item) {
 
     fieldset.append(...options);
 
-    return fieldset;
+    return [fieldset, document.createElement('br')];
 }
 
 function formTitle(item) {
@@ -182,9 +186,9 @@ function formParagraph(item) {
 function formNumberInput(item) {
     let arrayOfItems = [];
 
-    if (item.text) {
+    if (item.title) {
         let label = document.createElement("label");
-        label.innerText = item.text;
+        label.innerText = item.title;
 
         if (item.id) {
             label.setAttribute("for", item.id);
@@ -221,7 +225,13 @@ function formNumberInput(item) {
     numberInput.setAttribute("max", item.max || 10);
     numberInput.setAttribute("step", item.step || 1);
 
-    arrayOfItems.append(numberInput);
+    if (item.id){
+        numberInput.setAttribute("id", item.id);
+        numberInput.setAttribute("name", item.id);
+    }
+
+    arrayOfItems.push(numberInput);
+    arrayOfItems.push(document.createElement("br"));
 
     return arrayOfItems;
 }
