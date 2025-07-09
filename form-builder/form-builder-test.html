@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="form-builder.js"></script>
+</head>
+<body>
+    <script type="module">
+        import json_content from "./form-example.json" with { type: "json" };
+
+        console.log(json_content);
+
+        const form = buildForm(json_content);
+
+        document.body.appendChild(form);
+    </script>
+</body>
+</html>
