@@ -18,7 +18,7 @@ Customization options are:
       - "long" / "area", representing the textarea input form which allows for longer text input.
   -   title, a string which is shown on the left of the text input.
   -   id, a string which'll be the id for the sent data of this section.
-  -   default, a string which'll be the default value of the text when the page is loaded. Default is empty.
+  -   default-value, a string which'll be the default value of the text when the page is loaded. Default is empty.
 - "submit": representing the submit form button. Only one of these can be in the form.
 Customization options are:
   -   label, a string which'll be shown on the button itself.
@@ -49,4 +49,4 @@ Customization options are:
     -   max, a number representing the maximal value the user can input. Default is 10.
     -   step, a number representing how far away the "options" for inputs are. Default is 1.
     (For example, "step: 2" only allows odd or even numbers, depending on the value of min.)
-    -   default, a number representing the initial value presented to users.
+    -   default-value, a number representing the initial value presented to users.

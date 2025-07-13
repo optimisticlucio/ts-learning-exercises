@@ -8,7 +8,7 @@ function buildForm(formArray){
 }
 
 function handleFormContents(item) {
-    let formItem; // This is what's going to be returned at the end of the function.
+    let newFormItems; // This is what's going to be returned at the end of the function.
 
     if (!item.type ||  typeof (item.type) !== 'string') {
         throw new Error(`Invalid form item type: "${item.type}" is not a string!`);
@@ -16,40 +16,40 @@ function handleFormContents(item) {
 
     switch (item.type) {
         case "text":
-            formItem = formTextInput(item);
+            newFormItems = formTextInput(item);
             break;
         case "submit":
-            formItem = formSubmitButton(item);
+            newFormItems = formSubmitButton(item);
             break;
         case "choice":
-            formItem = formChoiceOption(item);
+            newFormItems = formChoiceOption(item);
             break;
         case "title":
-            formItem = formTitle(item);
+            newFormItems = formTitle(item);
             break;
         case "paragraph":
-            formItem = formParagraph(item);
+            newFormItems = formParagraph(item);
             break;
         case "horizontal-line":
-            formItem = document.createElement("hr");
+            newFormItems = document.createElement("hr");
             break;
         case "number":
-            formItem = formNumberInput(item);
+            newFormItems = formNumberInput(item);
             break;
         default:
             throw new Error(`Invalid form item type: ${item.type} is not a recognized item type!`);
     }
 
-    formItem = Array.isArray(formItem) ? formItem : [formItem];
+    newFormItems = Array.isArray(newFormItems) ? newFormItems : [newFormItems];
 
-    return formItem;
+    return newFormItems;
 }
 
 function formTextInput(item) {
-    let arrayOfItems = [];
+    const arrayOfItems = [];
 
     if (item.title) {
-        let label = document.createElement("label");
+        const label = document.createElement("label");
         label.innerText = item.title;
 
         if (item.id) {
@@ -79,8 +79,8 @@ function formTextInput(item) {
             throw new Error(`Text Input received an invalid variant type: ${item.variant}`);
     }
 
-    if (item.default) {
-        textInput.value = item.default;
+    if (item.defaultValue) {
+        textInput.value = item.defaultValue;
     }
 
     if (item.id) {
@@ -95,18 +95,18 @@ function formTextInput(item) {
 }
 
 function formSubmitButton(item) {
-    assureFieldExistsAndIsString(item.label, 'Title', 'label');
+    assureFieldExistsAndIsString({
+        variable: item.label,
+        nameOfFormItem: 'Submit Button',
+        nameOfField: 'label'});
 
-    let submitTarget = item.target;
-    if (typeof submitTarget !== 'string') {
-       submitTarget = null;
-    }
+    const submitTarget = typeof submitTarget === 'string' ? item.target : null;
 
-    let submitButton = document.createElement('input');
+    const submitButton = document.createElement('input');
     submitButton.setAttribute('type', 'submit');
 
-    if (submitTarget){
-        submitButton.setAttribute('value', submitTarget.label);
+    if (item.label) {
+        submitButton.setAttribute('value', item.label);
     }
 
     if (submitTarget) {
@@ -117,9 +117,9 @@ function formSubmitButton(item) {
 }
 
 function formChoiceOption(item) {
-    let fieldset = document.createElement("fieldset");
+    const fieldset = document.createElement("fieldset");
 
-    let legend = document.createElement("legend");
+    const legend = document.createElement("legend");
     legend.innerText = item.title || "Select Option";
     fieldset.append(legend);
 
@@ -140,16 +140,16 @@ function formChoiceOption(item) {
             throw new Error(`Choice Option received an invalid variant type: ${item.variant}`);
     }
 
-    let options = item.options.flatMap((option) => {
-        let optionArray = [];
+    const options = item.options.flatMap((option) => {
+        const optionArray = [];
 
-        let optionInput = document.createElement("input");
+        const optionInput = document.createElement("input");
         optionInput.setAttribute("type", itemType);
 
-        let optionLabel = document.createElement("label");
+        const optionLabel = document.createElement("label");
         optionLabel.innerText = option;
 
-        let optionId = option.replaceAll(" ", "-").toLowerCase();
+        const optionId = option.replaceAll(" ", "-").toLowerCase();
         optionInput.setAttribute("id", optionId);
         optionInput.setAttribute("name", optionId);
         optionLabel.setAttribute("for", optionId);
@@ -166,9 +166,12 @@ function formChoiceOption(item) {
 }
 
 function formTitle(item) {
-    assureFieldExistsAndIsString(item.content, 'Title', 'content');
+    assureFieldExistsAndIsString({
+        variable: item.content,
+        nameOfFormItem: 'Title',
+        nameOfField: 'content'});
 
-    let title = document.createElement("h3");
+    const title = document.createElement("h3");
     title.innerText = item.content;
 
     return title;
@@ -177,17 +180,17 @@ function formTitle(item) {
 function formParagraph(item) {
     assureFieldExistsAndIsString(item.content, 'Paragraph', 'content');
 
-    let paragraph = document.createElement("p");
+    const paragraph = document.createElement("p");
     paragraph.innerText = item.content;
 
     return paragraph;
 }
 
 function formNumberInput(item) {
-    let arrayOfItems = [];
+    const arrayOfItems = [];
 
     if (item.title) {
-        let label = document.createElement("label");
+        const label = document.createElement("label");
         label.innerText = item.title;
 
         if (item.id) {
@@ -217,8 +220,8 @@ function formNumberInput(item) {
             throw new Error(`Number Input received an invalid variant type: ${item.variant}`);
     }
 
-    if (item.default) {
-        numberInput.value = item.default;
+    if (item.defaultValue) {
+        numberInput.value = item.defaultValue;
     }
 
     numberInput.setAttribute("min", item.min || 0);
