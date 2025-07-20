@@ -1,0 +1,22 @@
+{
+  "name": "calculator",
+  "version": "1.0.0",
+  "description": "A calculator written in react",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compile": "npx prettier . --write && npx eslint ."
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "eslint": "^9.31.0",
+    "react": "^19.1.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.28.0",
+    "prettier": "3.6.2"
+  }
+}
