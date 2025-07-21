@@ -8,7 +8,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "compile": "npx prettier . --write && npx eslint ."
+    "compile": "npx prettier . --write && npx eslint . && npx babel index.js --out-file compiled_index.js"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
