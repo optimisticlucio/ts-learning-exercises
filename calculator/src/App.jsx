@@ -3,6 +3,8 @@ import { useState } from "react";
 import { css } from "@emotion/react";
 import "./App.css";
 
+const MAX_DIGITS_ON_DISPLAY = 6;
+
 function App() {
   return Calculator();
 }
@@ -24,7 +26,10 @@ function Calculator() {
       `}
     >
       <CalculatorDisplay displayValue={calculatorDisplay} />
-      <CalculatorDigits setCalculatorDisplay={setCalculatorDisplay} />
+      <CalculatorDigits
+        calculatorDisplay={calculatorDisplay}
+        setCalculatorDisplay={setCalculatorDisplay}
+      />
     </div>
   );
 }
@@ -34,6 +39,7 @@ function CalculatorDisplay({ displayValue }) {
     <div
       css={css`
         border: black solid 1px;
+        font-family: monospace;
       `}
     >
       {displayValue}
@@ -41,7 +47,7 @@ function CalculatorDisplay({ displayValue }) {
   );
 }
 
-function CalculatorDigits({ setCalculatorDisplay }) {
+function CalculatorDigits({ calculatorDisplay, setCalculatorDisplay }) {
   return (
     <div
       css={css`
@@ -55,16 +61,23 @@ function CalculatorDigits({ setCalculatorDisplay }) {
         <DigitButton
           digit={digit}
           setCalculatorDisplay={setCalculatorDisplay}
+          calculatorDisplay={calculatorDisplay}
         />
       ))}
     </div>
   );
 }
 
-function DigitButton({ digit, setCalculatorDisplay }) {
+function DigitButton({ digit, calculatorDisplay, setCalculatorDisplay }) {
+  function inputDigitToDisplay() {
+    if (calculatorDisplay.toString().length >= MAX_DIGITS_ON_DISPLAY) return;
+
+    setCalculatorDisplay(calculatorDisplay * 10 + digit);
+  }
+
   return (
     <div
-      onClick={() => setCalculatorDisplay(digit)} // TODO: This is not how this should work.
+      onClick={() => inputDigitToDisplay()} // TODO: This is not how this should work.
       css={css`
         border: black solid 1px;
         padding: 1ch;
