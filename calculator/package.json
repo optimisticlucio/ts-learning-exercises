@@ -12,6 +12,7 @@
     "iterate": "prettier --write \"src/**/*.{js,jsx,json,css,md}\" && eslint . && vite"
   },
   "dependencies": {
+    "@emotion/core": "^11.0.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "react": "^19.1.0",
