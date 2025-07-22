@@ -11,7 +11,8 @@ function handleFormContents(item) {
     let newFormItems; // This is what's going to be returned at the end of the function.
 
     if (!item.type ||  typeof (item.type) !== 'string') {
-        throw new Error(`Invalid form item type: "${item.type}" is not a string!`);
+        console.warn(`Invalid form item type: "${item.type}" is not a string!`);
+        return [];
     }
 
     switch (item.type) {
@@ -37,7 +38,8 @@ function handleFormContents(item) {
             newFormItems = formNumberInput(item);
             break;
         default:
-            throw new Error(`Invalid form item type: ${item.type} is not a recognized item type!`);
+            console.warn(`Invalid form item type: ${item.type} is not a recognized item type!`);
+            newFormItems = [];
     }
 
     newFormItems = Array.isArray(newFormItems) ? newFormItems : [newFormItems];
@@ -76,7 +78,8 @@ function formTextInput(item) {
             break;
 
         default:
-            throw new Error(`Text Input received an invalid variant type: ${item.variant}`);
+            console.warn(`Text Input received an invalid variant type: ${item.variant}`);
+            return [];
     }
 
     if (item.defaultValue) {
@@ -95,10 +98,12 @@ function formTextInput(item) {
 }
 
 function formSubmitButton(item) {
-    assureFieldExistsAndIsString({
+    if (!checkIfFieldExistsAndIsString({
         variable: item.label,
         nameOfFormItem: 'Submit Button',
-        nameOfField: 'label'});
+        nameOfField: 'label'})) {
+        return [];
+    }
 
     const submitTarget = typeof submitTarget === 'string' ? item.target : null;
 
@@ -137,7 +142,8 @@ function formChoiceOption(item) {
             break;
 
         default:
-            throw new Error(`Choice Option received an invalid variant type: ${item.variant}`);
+            console.warn(`Choice Option received an invalid variant type: ${item.variant}`);
+            return [];
     }
 
     const options = item.options.flatMap((option) => {
@@ -166,10 +172,12 @@ function formChoiceOption(item) {
 }
 
 function formTitle(item) {
-    assureFieldExistsAndIsString({
+    if (!checkIfFieldExistsAndIsString({
         variable: item.content,
         nameOfFormItem: 'Title',
-        nameOfField: 'content'});
+        nameOfField: 'content'})) {
+        return [];
+    }
 
     const title = document.createElement("h3");
     title.innerText = item.content;
@@ -178,7 +186,7 @@ function formTitle(item) {
 }
 
 function formParagraph(item) {
-    assureFieldExistsAndIsString(item.content, 'Paragraph', 'content');
+    checkIfFieldExistsAndIsString(item.content, 'Paragraph', 'content');
 
     const paragraph = document.createElement("p");
     paragraph.innerText = item.content;
@@ -217,7 +225,8 @@ function formNumberInput(item) {
             break;
 
         default:
-            throw new Error(`Number Input received an invalid variant type: ${item.variant}`);
+            console.warn(`Number Input received an invalid variant type: ${item.variant}`);
+            return [];
     }
 
     if (item.defaultValue) {
@@ -239,12 +248,16 @@ function formNumberInput(item) {
     return arrayOfItems;
 }
 
-function assureFieldExistsAndIsString(variable, nameOfFormItem, nameOfField) {
+function checkIfFieldExistsAndIsString(variable, nameOfFormItem, nameOfField) {
     if (!variable) {
-        throw new Error(`${nameOfFormItem}'s ${nameOfField} field is missing!`);
+        console.warn(`${nameOfFormItem}'s ${nameOfField} field is missing!`);
+        return false;
     }
 
     if (typeof (variable) !== 'string') {
-        throw new Error(`${nameOfFormItem}'s ${nameOfField} field is not a string!`);
+        console.warn(`${nameOfFormItem}'s ${nameOfField} field is not a string!`);
+        return false;
     }
+
+    return true;
 }

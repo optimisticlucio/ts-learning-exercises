@@ -7,11 +7,11 @@
 </head>
 <body>
     <script type="module">
-        import json_content from "./form-example.json" with { type: "json" };
+        import config from "./form-example.json" with { type: "json" };
 
-        console.log(json_content);
+        console.log(config);
 
-        const form = buildForm(json_content);
+        const form = buildForm(config);
 
         document.body.appendChild(form);
     </script>
