@@ -20,7 +20,7 @@ function Calculator() {
       css={css`
         display: flex;
         flex-direction: column;
-        max-width: 10em;
+        max-width: 14em;
         width: fit-content;
         font-size: 2em;
       `}
@@ -45,10 +45,12 @@ function CalculatorButtons({
 }) {
   return (
     <div
-    css={css`
-    display: flex;
-    flex-direction: row;
-    max-height: 7em`}>
+      css={css`
+        display: flex;
+        flex-direction: row;
+        max-height: 7em;
+      `}
+    >
       <CalculatorDigits
         calculatorDisplay={calculatorDisplay}
         setCalculatorDisplay={setCalculatorDisplay}
@@ -69,6 +71,8 @@ function CalculatorDisplay({ displayValue }) {
       css={css`
         border: black solid 1px;
         font-family: monospace;
+        color: black;
+        background-color: white;
       `}
     >
       {displayValue}
@@ -84,49 +88,70 @@ function CalculatorActions({
 }) {
   const [actionChosen, setActionChosen] = useState("none");
 
-  function add() {
+  function highlightCurrentButton(button) {
+    for (let otherButton of button.parentElement.children) {
+      otherButton.classList.remove("active");
+    }
+
+    button.classList.add("active");
+  }
+
+  function add(button) {
     setActionAndClearDisplay("add");
+    highlightCurrentButton(button);
   }
 
-  function subtract() {
+  function subtract(button) {
     setActionAndClearDisplay("subtract");
+    highlightCurrentButton(button);
   }
 
-  function multiply() {
+  function multiply(button) {
     setActionAndClearDisplay("multiply");
+    highlightCurrentButton(button);
   }
 
-  function divide() {
+  function divide(button) {
     setActionAndClearDisplay("divide");
+    highlightCurrentButton(button);
   }
 
   function setActionAndClearDisplay(action) {
     setActionChosen(action);
-    setLastResult(calculatorDisplay)
+    setLastResult(calculatorDisplay);
     setCalculatorDisplay(0);
   }
 
-  function clear() {
+  function clear(button) {
     setCalculatorDisplay(0);
+    setLastResult(0);
+
+    for (let otherButton of button.parentElement.children) {
+      otherButton.classList.remove("active");
+    }
   }
 
-  function equality() {
+  function equality(button) {
     switch (actionChosen) {
       case "add":
         setCalculatorDisplay(lastResult + calculatorDisplay);
         break;
 
-        case "divide":
-          setCalculatorDisplay(lastResult / calculatorDisplay);
-          break;
+      case "divide":
+        if (calculatorDisplay === 0) {
+          setCalculatorDisplay(0);
+        } else {
+          setCalculatorDisplay(Math.round(lastResult / calculatorDisplay));
+        }
+        break;
 
-          case "subtract":
-            setCalculatorDisplay(lastResult - calculatorDisplay);
-            break;
+      case "subtract":
+        setCalculatorDisplay(lastResult - calculatorDisplay);
+        break;
 
-            case "multiply":
-              setCalculatorDisplay(lastResult * calculatorDisplay);
-              break;
+      case "multiply":
+        setCalculatorDisplay(lastResult * calculatorDisplay);
+        break;
 
       case "none":
         // If there isn't an action selected the equality button doesn't do anything.
@@ -139,31 +164,48 @@ function CalculatorActions({
     }
 
     setLastResult(calculatorDisplay);
+    for (let otherButton of button.parentElement.children) {
+      otherButton.classList.remove("active");
+    }
   }
 
   return (
     <div
-    css={css`
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+      css={css`
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
         flex-wrap: wrap;
-    flex-grow: 1`}>
+      `}
+    >
       {[
-        ["+", add], ["-", subtract],
-          ["*", multiply],
-          [":", divide],
+        ["+", add],
+        ["-", subtract],
+        ["*", multiply],
+        [":", divide],
         ["=", equality],
-        ["AC", clear]
+        ["AC", clear],
       ].map(([label, action]) => (
         <div
-          onClick={action}
+          onClick={(event) => {
+            action(event.currentTarget);
+          }}
           css={css`
             background-color: sandybrown;
             color: cornflowerblue;
             border: 1px solid cornflowerblue;
             padding: 0.25em;
             text-align: center;
+
+            &:hover {
+              filter: contrast(1.5);
+            }
+
+            &.active {
+              background-color: cornflowerblue;
+              color: tomato;
+              border-color: tomato;
+            }
           `}
         >
           {label}
@@ -181,7 +223,6 @@ function CalculatorDigits({ calculatorDisplay, setCalculatorDisplay }) {
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: space-between;
-        flex-grow: 2;
       `}
     >
       {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((digit) => (
@@ -204,13 +245,16 @@ function DigitButton({ digit, calculatorDisplay, setCalculatorDisplay }) {
 
   return (
     <div
-      onClick={() => inputDigitToDisplay()} // TODO: This is not how this should work.
+      onClick={() => inputDigitToDisplay()}
       css={css`
         border: black solid 1px;
         padding: 1ch;
         background: beige;
         color: chocolate;
         font-weight: bold;
+        &:hover {
+          filter: brightness(0.7);
+        }
       `}
     >
       {digit}
