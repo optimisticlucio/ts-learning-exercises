@@ -1,10 +1,12 @@
 /** @jsxImportSource @emotion/react */
-// import { useState } from "react";
 import { css } from "@emotion/react";
+import DigitButton from "./DigitButton.jsx";
 
-const MAX_DIGITS_ON_DISPLAY = 6;
-
-function CalculatorDigits({ calculatorDisplay, setCalculatorDisplay }) {
+function CalculatorDigits({
+  calculatorDisplay,
+  setCalculatorDisplay,
+  pressable,
+}) {
   return (
     <div
       css={css`
@@ -19,34 +21,9 @@ function CalculatorDigits({ calculatorDisplay, setCalculatorDisplay }) {
           digit={digit}
           setCalculatorDisplay={setCalculatorDisplay}
           calculatorDisplay={calculatorDisplay}
+          pressable={pressable}
         />
       ))}
-    </div>
-  );
-}
-
-function DigitButton({ digit, calculatorDisplay, setCalculatorDisplay }) {
-  function inputDigitToDisplay() {
-    if (calculatorDisplay.toString().length >= MAX_DIGITS_ON_DISPLAY) return;
-
-    setCalculatorDisplay(calculatorDisplay * 10 + digit);
-  }
-
-  return (
-    <div
-      onClick={() => inputDigitToDisplay()}
-      css={css`
-        border: 1px black solid;
-        padding: 1ch;
-        background: beige;
-        color: chocolate;
-        font-weight: bold;
-        &:hover {
-          filter: brightness(0.7);
-        }
-      `}
-    >
-      {digit}
     </div>
   );
 }

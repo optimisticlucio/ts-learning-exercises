@@ -2,32 +2,40 @@
 import { useState } from "react";
 import { css } from "@emotion/react";
 
+const ACTIONS = {
+  ADD: "ADD",
+  SUBTRACT: "SUBTRACT",
+  MULTIPLY: "MULTIPLY",
+  DIVIDE: "DIVIDE",
+  NONE: "NONE",
+};
+
 function CalculatorActions({
   calculatorDisplay,
   setCalculatorDisplay,
   lastResult,
   setLastResult,
 }) {
-  const [actionChosen, setActionChosen] = useState("none");
+  const [actionChosen, setActionChosen] = useState(ACTIONS.NONE);
   const [highlightedButton, setHighlightedButton] = useState("none");
 
   function add(buttonKey) {
-    setActionAndClearDisplay("add");
+    setActionAndClearDisplay(ACTIONS.ADD);
     setHighlightedButton(buttonKey);
   }
 
   function subtract(buttonKey) {
-    setActionAndClearDisplay("subtract");
+    setActionAndClearDisplay(ACTIONS.SUBTRACT);
     setHighlightedButton(buttonKey);
   }
 
   function multiply(buttonKey) {
-    setActionAndClearDisplay("multiply");
+    setActionAndClearDisplay(ACTIONS.MULTIPLY);
     setHighlightedButton(buttonKey);
   }
 
   function divide(buttonKey) {
-    setActionAndClearDisplay("divide");
+    setActionAndClearDisplay(ACTIONS.DIVIDE);
     setHighlightedButton(buttonKey);
   }
 
@@ -46,11 +54,11 @@ function CalculatorActions({
 
   function equality() {
     switch (actionChosen) {
-      case "add":
+      case ACTIONS.ADD:
         setCalculatorDisplay(lastResult + calculatorDisplay);
         break;
 
-      case "divide":
+      case ACTIONS.DIVIDE:
         if (calculatorDisplay === 0) {
           setCalculatorDisplay(0);
         } else {
@@ -58,15 +66,15 @@ function CalculatorActions({
         }
         break;
 
-      case "subtract":
+      case ACTIONS.SUBTRACT:
         setCalculatorDisplay(lastResult - calculatorDisplay);
         break;
 
-      case "multiply":
+      case ACTIONS.MULTIPLY:
         setCalculatorDisplay(lastResult * calculatorDisplay);
         break;
 
-      case "none":
+      case ACTIONS.NONE:
         // If there isn't an action selected the equality button doesn't do anything.
         break;
       default:
