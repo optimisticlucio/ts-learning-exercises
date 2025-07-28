@@ -88,32 +88,9 @@ function CalculatorActions({
     setHighlightedButton("none");
   }
 
-  const buttonCss = css`
-    background-color: sandybrown;
-    color: cornflowerblue;
-    border: 1px solid cornflowerblue;
-    padding: 0.25em;
-    text-align: center;
-
-    &:hover {
-      filter: contrast(1.5);
-    }
-
-    &.active {
-      background-color: cornflowerblue;
-      color: tomato;
-      border-color: tomato;
-    }
-  `;
-
   return (
     <div
-      css={css`
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        flex-wrap: wrap;
-      `}
+      css={buttonHolderCss}
     >
       {[
         ["+", add],
@@ -137,5 +114,30 @@ function CalculatorActions({
     </div>
   );
 }
+
+const buttonCss = css`
+    background-color: sandybrown;
+    color: cornflowerblue;
+    border: 1px solid cornflowerblue;
+    padding: 0.25em;
+    text-align: center;
+
+    &:hover {
+      filter: contrast(1.5);
+    }
+
+    &.active {
+      background-color: cornflowerblue;
+      color: tomato;
+      border-color: tomato;
+    }
+  `;
+
+const buttonHolderCss = css`
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        flex-wrap: wrap;
+      `;
 
 export default CalculatorActions;

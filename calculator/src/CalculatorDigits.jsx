@@ -9,12 +9,7 @@ function CalculatorDigits({
 }) {
   return (
     <div
-      css={css`
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: space-between;
-      `}
+      css={buttonHolderCss}
     >
       {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((digit) => (
         <DigitButton
@@ -27,5 +22,12 @@ function CalculatorDigits({
     </div>
   );
 }
+
+const buttonHolderCss = css`
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+      `;
 
 export default CalculatorDigits;

@@ -14,7 +14,14 @@ export default function DigitButton({
   return (
     <div
       onClick={pressable ? inputDigitToDisplay : undefined}
-      css={css`
+      css={digitCss}
+    >
+      {digit}
+    </div>
+  );
+}
+
+const digitCss = css`
         border: 1px black solid;
         padding: 1ch;
         background: beige;
@@ -23,9 +30,4 @@ export default function DigitButton({
         &:hover {
           filter: brightness(0.7);
         }
-      `}
-    >
-      {digit}
-    </div>
-  );
-}
+      `;

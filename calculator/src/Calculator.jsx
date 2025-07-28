@@ -14,22 +14,12 @@ function Calculator() {
 
   return (
     <div
-      css={css`
-        display: flex;
-        flex-direction: column;
-        max-width: 14em;
-        width: fit-content;
-        font-size: 2em;
-      `}
+      css={cssForWholeCalculator}
     >
       <CalculatorDisplay displayValue={displayedDigits} />
 
       <div
-        css={css`
-          display: flex;
-          flex-direction: row;
-          max-height: 7em;
-        `}
+        css={cssForButtons}
       >
         <CalculatorDigits
           calculatorDisplay={displayedDigits}
@@ -46,5 +36,19 @@ function Calculator() {
     </div>
   );
 }
+
+const cssForWholeCalculator = css`
+        display: flex;
+        flex-direction: column;
+        max-width: 14em;
+        width: fit-content;
+        font-size: 2em;
+      `;
+
+const cssForButtons = css`
+          display: flex;
+          flex-direction: row;
+          max-height: 7em;
+        `;
 
 export default Calculator;
