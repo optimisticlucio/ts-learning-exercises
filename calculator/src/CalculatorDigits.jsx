@@ -2,20 +2,13 @@
 import { css } from "@emotion/react";
 import DigitButton from "./DigitButton.jsx";
 
-function CalculatorDigits({
-  calculatorDisplay,
-  setCalculatorDisplay,
-  pressable,
-}) {
+function CalculatorDigits({ addDigitToDisplay, pressable }) {
   return (
-    <div
-      css={buttonHolderCss}
-    >
+    <div css={buttonHolderCss}>
       {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((digit) => (
         <DigitButton
           digit={digit}
-          setCalculatorDisplay={setCalculatorDisplay}
-          calculatorDisplay={calculatorDisplay}
+          addDigitToDisplay={addDigitToDisplay}
           pressable={pressable}
         />
       ))}
@@ -24,10 +17,10 @@ function CalculatorDigits({
 }
 
 const buttonHolderCss = css`
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: space-between;
-      `;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+`;
 
 export default CalculatorDigits;

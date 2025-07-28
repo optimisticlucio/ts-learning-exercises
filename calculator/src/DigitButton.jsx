@@ -1,19 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 
-export default function DigitButton({
-  digit,
-  calculatorDisplay,
-  setCalculatorDisplay,
-  pressable,
-}) {
-  function inputDigitToDisplay() {
-    setCalculatorDisplay(calculatorDisplay * 10 + digit);
-  }
-
+export default function DigitButton({ digit, addDigitToDisplay, pressable }) {
   return (
     <div
-      onClick={pressable ? inputDigitToDisplay : undefined}
+      onClick={pressable ? () => addDigitToDisplay(digit) : undefined}
       css={digitCss}
     >
       {digit}
@@ -22,12 +13,12 @@ export default function DigitButton({
 }
 
 const digitCss = css`
-        border: 1px black solid;
-        padding: 1ch;
-        background: beige;
-        color: chocolate;
-        font-weight: bold;
-        &:hover {
-          filter: brightness(0.7);
-        }
-      `;
+  border: 1px black solid;
+  padding: 1ch;
+  background: beige;
+  color: chocolate;
+  font-weight: bold;
+  &:hover {
+    filter: brightness(0.7);
+  }
+`;
