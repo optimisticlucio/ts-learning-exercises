@@ -1,7 +1,13 @@
 import {createAction, createReducer} from "@reduxjs/toolkit";
 
 export const changeCurrentTask = createAction("changeCurrentTask");
-export const addNewTask = createAction("addNewTask");
+export const addNewTask = createAction("addNewTask", (taskName = "TASK NAME NOT SET") => {
+    return {
+        payload: {
+            taskName: taskName
+        }
+    };
+});
 export const runOncePerSecond = createAction("runOncePerSecond");
 
 const initialState = {
@@ -30,6 +36,18 @@ export const reducer = createReducer(initialState, (builder) => {
             state.currentActiveTask = action.payload;
         })
         .addCase(addNewTask, (state, action) => {
+                const BIGGEST_ID = 1000;
 
+                // Get random unique ID that is not currently in tasks
+                let randomID = Math.floor(Math.random() * BIGGEST_ID);
+                while (state.tasks[randomID]) {
+                    randomID = Math.floor(Math.random() * BIGGEST_ID);
+                }
+
+                state.tasks[randomID] = {
+                    id: randomID,
+                    name: action.payload.taskName,
+                    timePassedInSeconds: 0
+                };
         })
 })
