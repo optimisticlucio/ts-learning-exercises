@@ -1,6 +1,6 @@
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import TimeTracker from "./TimeTracker.jsx";
+import TimeTracker from "./time-tracker.jsx";
 import { Provider } from "react-redux";
 import { store } from "./store";
 

@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import { formatTimePassedInSeconds } from "./Utils.jsx";
+import { formatTimePassedInSeconds } from "./utils.jsx";
 import { useDispatch } from "react-redux";
 import { changeCurrentTask, pauseAllTasks } from "./reducers.jsx";
 

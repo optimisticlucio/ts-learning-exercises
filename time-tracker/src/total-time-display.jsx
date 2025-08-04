@@ -1,4 +1,4 @@
-import { formatTimePassedInSeconds } from "./Utils.jsx";
+import { formatTimePassedInSeconds } from "./utils.jsx";
 
 export default function TotalTimeDisplay({ totalTimeInSeconds = 0 }) {
   return (

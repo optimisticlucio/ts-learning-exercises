@@ -1,10 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import TaskAdder from "./TaskAdder.jsx";
-import TotalTimeDisplay from "./TotalTimeDisplay.jsx";
-import Task from "./Task.jsx";
+import TaskAdder from "./task-adder.jsx";
+import TotalTimeDisplay from "./total-time-display.jsx";
+import Task from "./task.jsx";
 import { useSelector } from "react-redux";
-import SecondCounter from "./SecondCounter.jsx";
+import SecondCounter from "./second-counter.jsx";
 
 export default function TimeTracker() {
   const tasks = useSelector((state) => state.tasks);
