@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { runOncePerSecond } from "./reducers.jsx";
+import { runOncePerSecond } from "../redux/reducers.jsx";
 
 export default function SecondCounter() {
   const dispatch = useDispatch();
