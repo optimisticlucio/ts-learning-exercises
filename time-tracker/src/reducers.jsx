@@ -1,6 +1,7 @@
 import {createAction, createReducer} from "@reduxjs/toolkit";
 
 export const changeCurrentTask = createAction("changeCurrentTask");
+export const pauseAllTasks = createAction("pauseAllTasks");
 export const addNewTask = createAction("addNewTask", (taskName = "TASK NAME NOT SET") => {
     return {
         payload: {
@@ -23,7 +24,7 @@ export const reducer = createReducer(initialState, (builder) => {
             // If there's an active task, tick forward both the task and the general time tracker.
             const activeTask = state.tasks[state.currentActiveTask];
             if (activeTask) {
-                activeTask.totalTimePassedInSeconds += 1;
+                activeTask.timePassedInSeconds += 1;
                 state.totalTimePassedInSeconds += 1;
             }
         })
@@ -49,5 +50,8 @@ export const reducer = createReducer(initialState, (builder) => {
                     name: action.payload.taskName,
                     timePassedInSeconds: 0
                 };
+        })
+        .addCase(pauseAllTasks, (state) => {
+            state.currentActiveTask = null;
         })
 })

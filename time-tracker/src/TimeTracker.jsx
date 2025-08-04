@@ -1,43 +1,55 @@
 
 /** @jsxImportSource @emotion/react */
-import { useState, useEffect } from "react";
 import { css } from "@emotion/react";
 import TaskAdder from "./TaskAdder.jsx";
 import TotalTimeDisplay from "./TotalTimeDisplay.jsx";
 import Task from "./Task.jsx";
-
-const testTasks = {
-    1: {
-        id: 1,
-        name: "Some Task",
-        timePassedInSeconds: 4
-    },
-    3: {
-        id: 3,
-        name: "Another Task",
-        timePassedInSeconds: 62
-    }
-};
+import { useSelector } from 'react-redux';
+import SecondCounter from "./SecondCounter.jsx";
+import {store} from "./store.jsx";
+import {useEffect} from "react";
 
 export default function TimeTracker() {
+    const tasks = useSelector(state => state.tasks);
+    const totalTime = useSelector(state => state.totalTimePassedInSeconds);
+    const activeTaskID = useSelector(state => state.currentActiveTask);
 
-    const tasks = testTasks; // TODO: Connect with the actual tasks.
+    useEffect(() => {
+        const unsubscribe = store.subscribe(() => {
+            console.log('Updated state:', store.getState());
+        });
 
-  return (
-    <>
-      <TaskAdder />
-        <div css={taskHolderCss}>
-            {tasks.map((task) => (
-                <Task name={task.name} timePassedInSeconds={task.timePassedInSeconds} active={false}/>
-            ))}
+        return () => unsubscribe();
+    }, []);
+
+      return (
+        <div css={generalCss}>
+
+            <SecondCounter />
+          <TaskAdder />
+            <div css={taskHolderCss}>
+                {Object.values(tasks).map((task) => (
+                    <Task
+                        name={task.name}
+                        timePassedInSeconds={task.timePassedInSeconds}
+                        active={task.id === activeTaskID}
+                        taskID={task.id}
+                        key={task.id}/>
+                ))}
+            </div>
+          <TotalTimeDisplay totalTimeInSeconds={totalTime}/>
         </div>
-      <TotalTimeDisplay />
-    </>
-  )
+      );
 }
 
 const taskHolderCss = css`
     border-style: none solid;
     border-width: .25ch;
     border-color: black;
+`;
+
+const generalCss = css` 
+    background-color: blanchedalmond;
+    padding: 1ch;
+    color: darkgoldenrod;
 `;

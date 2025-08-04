@@ -1,11 +1,9 @@
+import { formatTimePassedInSeconds } from "./Utils.jsx";
 
-
-export default function TotalTimeDisplay({ totalTimePassedInSeconds }) {
-    const properlyFormattedTime = new Date(totalTimePassedInSeconds * 1000).toTimeString().split(" ")[0];
-
+export default function TotalTimeDisplay({ totalTimeInSeconds = 0}) {
     return (
         <div>
-            Total Time Passed: { properlyFormattedTime }
+            Total Time Passed: { formatTimePassedInSeconds(totalTimeInSeconds) }
         </div>
     );
 }

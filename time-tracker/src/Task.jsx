@@ -1,8 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
+import { formatTimePassedInSeconds } from "./Utils.jsx"
+import { useDispatch } from 'react-redux';
+import {changeCurrentTask, pauseAllTasks} from './reducers.jsx';
 
-export default function Task({ name, timePassedInSeconds, active = false}) {
-    const properlyFormattedTime = new Date(timePassedInSeconds * 1000).toTimeString().split(" ")[0];
+export default function Task({ name, timePassedInSeconds, taskID, active = false}) {
+    const dispatch = useDispatch();
 
     return (
         <div css={taskCss}>
@@ -10,9 +13,15 @@ export default function Task({ name, timePassedInSeconds, active = false}) {
                 {name}
             </div>
             <div>
-                {properlyFormattedTime}
-            </div> // TODO: Give button functionality
-            <button>{active ? "Pause" : "Start"}</button>
+                {formatTimePassedInSeconds(timePassedInSeconds)}
+            </div>
+            <button
+                onClick={ active ?
+                    () => dispatch(pauseAllTasks())
+                    :
+                    () => dispatch(changeCurrentTask(taskID))
+            }
+            >{active ? "Pause" : "Start"}</button>
         </div>
     );
 }
@@ -21,4 +30,5 @@ const taskCss = css`
     display:flex;
     flex-direction: row;
     justify-content: space-between;
+    padding: 1ch;
 `;
