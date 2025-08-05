@@ -3,34 +3,32 @@ import { css } from "@emotion/react";
 import NewTaskInput from "./new-task-input.jsx";
 import TotalTimeDisplay from "./total-time-display.jsx";
 import Task from "./task.jsx";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import { runOncePerSecond } from "../pure-redux/reducers.js";
-import {store} from "../pure-redux/store.js";
+import { store } from "../pure-redux/store.js";
 
 export default function TimeTracker() {
   const [tasks, setTasks] = useState({});
-  const [totalTime, setTotalTime] = useState(0)
+  const [totalTime, setTotalTime] = useState(0);
   const [activeTaskID, setActiveTaskID] = useState(null);
 
-    useEffect(() => {
-        store.subscribe(() => {
-            const { tasks, totalSecondsPassed, currentActiveTask } = store.getState();
-            setTasks(tasks);
-            setTotalTime(totalSecondsPassed);
-            setActiveTaskID(currentActiveTask);
-        })
-    }, []);
+  useEffect(() => {
+    store.subscribe(() => {
+      const { tasks, totalSecondsPassed, currentActiveTask } = store.getState();
+      setTasks(tasks);
+      setTotalTime(totalSecondsPassed);
+      setActiveTaskID(currentActiveTask);
+    });
+  }, []);
 
-    useEffect(() => {
-        const id = setInterval(() => {
-            store.dispatch(runOncePerSecond());
-            console.log(`Tick, ${JSON.stringify(store.getState())}`); // For Debugging
-        }, 1000);
+  useEffect(() => {
+    const id = setInterval(() => {
+      store.dispatch(runOncePerSecond());
+      console.log(`Tick, ${JSON.stringify(store.getState())}`); // For Debugging
+    }, 1000);
 
-        return () => clearInterval(id);
-    }, []);
-
-
+    return () => clearInterval(id);
+  }, []);
 
   return (
     <div css={generalCss}>

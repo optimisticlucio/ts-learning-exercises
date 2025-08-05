@@ -2,7 +2,7 @@
 import { css } from "@emotion/react";
 import { formatTimePassedInSeconds } from "../utils.js";
 import { changeCurrentTask, pauseCurrentTask } from "../pure-redux/reducers.js";
-import {store} from "../pure-redux/store.js";
+import { store } from "../pure-redux/store.js";
 
 export default function Task({
   name,
@@ -10,7 +10,6 @@ export default function Task({
   taskID,
   isActive = false,
 }) {
-
   return (
     <div css={taskCss}>
       <div>{name}</div>
