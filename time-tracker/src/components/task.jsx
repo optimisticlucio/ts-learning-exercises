@@ -2,7 +2,7 @@
 import { css } from "@emotion/react";
 import { formatTimePassedInSeconds } from "../utils.js";
 import { useDispatch } from "react-redux";
-import { changeCurrentTask, pauseCurrentTask } from "../redux/reducers.jsx";
+import { changeCurrentTask, pauseCurrentTask } from "../redux-toolkit/reducers.js";
 
 export default function Task({
   name,

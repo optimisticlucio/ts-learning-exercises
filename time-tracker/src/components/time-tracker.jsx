@@ -6,7 +6,7 @@ import Task from "./task.jsx";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { runOncePerSecond } from "../redux/reducers.jsx";
+import { runOncePerSecond } from "../redux-toolkit/reducers.js";
 
 export default function TimeTracker() {
   const tasks = useSelector((state) => state.tasks);
