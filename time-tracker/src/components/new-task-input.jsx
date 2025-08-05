@@ -1,10 +1,8 @@
-import { useDispatch } from "react-redux";
-import { addNewTask } from "../redux-toolkit/reducers.js";
+import { addNewTask } from "../pure-redux/reducers.js";
 import { useState } from "react";
 
 export default function NewTaskInput() {
   const [inputValue, setInputValue] = useState("");
-  const dispatch = useDispatch();
 
   return (
     <div>
@@ -17,7 +15,7 @@ export default function NewTaskInput() {
         placeholder="Write task name here"
       />
       <button onClick={() => {
-          dispatch(addNewTask(inputValue));
+          window.store.dispatch(addNewTask(inputValue));
           setInputValue("");
       }}>Add Task</button>
     </div>
