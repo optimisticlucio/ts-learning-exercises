@@ -52,11 +52,15 @@ export function coreReducer(state, action) {
             }
 
             return { ...state ,
-            randomID: {
-                id: randomID,
-                name: action.taskName,
-                secondsPassed: 0,
-            }};
+                tasks: {
+                ...state.tasks,
+                    [randomID]: {
+                        id: randomID,
+                        name: action.taskName,
+                        secondsPassed: 0,
+                    }
+                }
+            };
         }
 
         case ACTIONS.CHANGE_CURRENT_TASK:
@@ -75,7 +79,7 @@ export function coreReducer(state, action) {
 
             if (activeTask) {
                 return {...state,
-                    totalSecondsPassed: state.secondsPassed + 1,
+                    totalSecondsPassed: state.totalSecondsPassed + 1,
                     tasks: {
                     ...state.tasks,
                         [activeTask.id]: {

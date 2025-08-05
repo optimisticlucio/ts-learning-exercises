@@ -5,6 +5,7 @@ import TotalTimeDisplay from "./total-time-display.jsx";
 import Task from "./task.jsx";
 import {useEffect, useState} from "react";
 import { runOncePerSecond } from "../pure-redux/reducers.js";
+import {store} from "../pure-redux/store.js";
 
 export default function TimeTracker() {
   const [tasks, setTasks] = useState({});
@@ -12,22 +13,24 @@ export default function TimeTracker() {
   const [activeTaskID, setActiveTaskID] = useState(null);
 
     useEffect(() => {
-        const id = setInterval(() => {
-            window.store.dispatch(runOncePerSecond());
-            //console.log(`Tick`); // For Debugging
-        }, 1000);
-
-        return () => clearInterval(id);
-    }, []);
-
-    useEffect(() => {
-        window.store.subscribe(() => {
-            const { tasks, totalSecondsPassed, currentActiveTask } = window.store.getState();
+        store.subscribe(() => {
+            const { tasks, totalSecondsPassed, currentActiveTask } = store.getState();
             setTasks(tasks);
             setTotalTime(totalSecondsPassed);
             setActiveTaskID(currentActiveTask);
         })
     }, []);
+
+    useEffect(() => {
+        const id = setInterval(() => {
+            store.dispatch(runOncePerSecond());
+            console.log(`Tick, ${JSON.stringify(store.getState())}`); // For Debugging
+        }, 1000);
+
+        return () => clearInterval(id);
+    }, []);
+
+
 
   return (
     <div css={generalCss}>

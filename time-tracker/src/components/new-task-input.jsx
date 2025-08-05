@@ -1,5 +1,6 @@
 import { addNewTask } from "../pure-redux/reducers.js";
 import { useState } from "react";
+import {store} from "../pure-redux/store.js";
 
 export default function NewTaskInput() {
   const [inputValue, setInputValue] = useState("");
@@ -15,7 +16,7 @@ export default function NewTaskInput() {
         placeholder="Write task name here"
       />
       <button onClick={() => {
-          window.store.dispatch(addNewTask(inputValue));
+          store.dispatch(addNewTask(inputValue));
           setInputValue("");
       }}>Add Task</button>
     </div>

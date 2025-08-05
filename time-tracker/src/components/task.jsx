@@ -2,6 +2,7 @@
 import { css } from "@emotion/react";
 import { formatTimePassedInSeconds } from "../utils.js";
 import { changeCurrentTask, pauseCurrentTask } from "../pure-redux/reducers.js";
+import {store} from "../pure-redux/store.js";
 
 export default function Task({
   name,
@@ -17,8 +18,8 @@ export default function Task({
       <button
         onClick={
           isActive
-            ? () => window.store.dispatch(pauseCurrentTask())
-            : () => window.store.dispatch(changeCurrentTask(taskID))
+            ? () => store.dispatch(pauseCurrentTask())
+            : () => store.dispatch(changeCurrentTask(taskID))
         }
       >
         {isActive ? "Pause" : "Start"}
