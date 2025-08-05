@@ -2,7 +2,7 @@ import { useDispatch } from "react-redux";
 import { addNewTask } from "../redux/reducers.jsx";
 import { useState } from "react";
 
-export default function TaskAdder() {
+export default function NewTaskInput() {
   const [inputValue, setInputValue] = useState("");
   const dispatch = useDispatch();
 
@@ -11,12 +11,15 @@ export default function TaskAdder() {
       <input
         type="text"
         value={inputValue}
-        onChange={(e) => {
-          setInputValue(e.target.value);
+        onChange={(event) => {
+          setInputValue(event.target.value);
         }}
         placeholder="Write task name here"
       />
-      <button onClick={() => dispatch(addNewTask(inputValue))}>Add Task</button>
+      <button onClick={() => {
+          dispatch(addNewTask(inputValue));
+          setInputValue("");
+      }}>Add Task</button>
     </div>
   );
 }
