@@ -3,22 +3,22 @@ import { useState } from "react";
 import { store } from "../pure-redux/store.js";
 
 export default function NewTaskInput() {
-  const [inputValue, setInputValue] = useState("");
+  const [taskName, setTaskName] = useState("");
 
   return (
     <div>
       <input
         type="text"
-        value={inputValue}
+        value={taskName}
         onChange={(event) => {
-          setInputValue(event.target.value);
+          setTaskName(event.target.value);
         }}
         placeholder="Write task name here"
       />
       <button
         onClick={() => {
-          store.dispatch(addNewTask(inputValue));
-          setInputValue("");
+          store.dispatch(addNewTask(taskName));
+          setTaskName("");
         }}
       >
         Add Task

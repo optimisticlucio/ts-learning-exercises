@@ -1,11 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import NewTaskInput from "./new-task-input.jsx";
-import TotalTimeDisplay from "./total-time-display.jsx";
 import Task from "./task.jsx";
 import { useEffect, useState } from "react";
 import { runOncePerSecond } from "../pure-redux/reducers.js";
 import { store } from "../pure-redux/store.js";
+import { formatTimePassedInSeconds } from "../utils.js";
 
 export default function TimeTracker() {
   const [tasks, setTasks] = useState({});
@@ -22,12 +22,12 @@ export default function TimeTracker() {
   }, []);
 
   useEffect(() => {
-    const id = setInterval(() => {
+    const interval = setInterval(() => {
       store.dispatch(runOncePerSecond());
       console.log(`Tick, ${JSON.stringify(store.getState())}`); // For Debugging
     }, 1000);
 
-    return () => clearInterval(id);
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -36,15 +36,15 @@ export default function TimeTracker() {
       <div css={taskHolderCss}>
         {Object.values(tasks).map((task) => (
           <Task
+            key={task.id}
             name={task.name}
             secondsPassed={task.secondsPassed}
             isActive={task.id === activeTaskID}
             taskID={task.id}
-            key={task.id}
           />
         ))}
       </div>
-      <TotalTimeDisplay totalSecondsPassed={totalTime} />
+      <div>Total Time Passed: {formatTimePassedInSeconds(totalTime)}</div>
     </div>
   );
 }

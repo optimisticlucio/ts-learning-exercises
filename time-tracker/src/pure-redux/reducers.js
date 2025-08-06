@@ -1,9 +1,4 @@
-export const ACTIONS = {
-  CHANGE_CURRENT_TASK: "CHANGE_CURRENT_TASK",
-  ADD_NEW_TASK: "ADD_NEW_TASK",
-  PAUSE_CURRENT_TASK: "PAUSE_CURRENT_TASK",
-  RUN_ONCE_PER_SECOND: "RUN_ONCE_PER_SECOND",
-};
+import { ACTIONS } from "./actions.js";
 
 export const initialState = {
   tasks: {},
@@ -11,33 +6,25 @@ export const initialState = {
   currentActiveTask: null,
 };
 
-export function changeCurrentTask(taskID) {
-  return {
-    type: ACTIONS.CHANGE_CURRENT_TASK,
-    taskID,
-  };
-}
+export const changeCurrentTask = (taskID) => ({
+  type: ACTIONS.CHANGE_CURRENT_TASK,
+  taskID,
+});
 
-export function pauseCurrentTask() {
-  return {
-    type: ACTIONS.PAUSE_CURRENT_TASK,
-  };
-}
+export const pauseCurrentTask = () => ({
+  type: ACTIONS.PAUSE_CURRENT_TASK,
+});
 
-export function addNewTask(taskName) {
-  return {
-    type: ACTIONS.ADD_NEW_TASK,
-    taskName,
-  };
-}
+export const addNewTask = (taskName) => ({
+  type: ACTIONS.ADD_NEW_TASK,
+  taskName,
+});
 
-export function runOncePerSecond() {
-  return {
-    type: ACTIONS.RUN_ONCE_PER_SECOND,
-  };
-}
+export const runOncePerSecond = () => ({
+  type: ACTIONS.RUN_ONCE_PER_SECOND,
+});
 
-export function coreReducer(state, action) {
+export function rootReducer(state, action) {
   switch (action.type) {
     case ACTIONS.PAUSE_CURRENT_TASK:
       return { ...state, currentActiveTask: null };
@@ -69,7 +56,7 @@ export function coreReducer(state, action) {
         console.warn(
           `ChangeCurrentTask was given an invalid task number - ${action.taskID}`,
         );
-        return;
+        return state;
       }
 
       return { ...state, currentActiveTask: action.taskID };
