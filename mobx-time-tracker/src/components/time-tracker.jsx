@@ -1,53 +1,35 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import NewTaskInput from "./new-task-input.jsx";
-import Task from "./task.jsx";
-import { useEffect, useState } from "react";
-import { runOncePerSecond } from "../pure-redux/reducers.js";
-import { store } from "../pure-redux/store.js";
+import { NewTaskInput } from "./new-task-input.jsx";
+import { Task } from "./task.jsx";
 import { formatTimePassedInSeconds } from "../utils.js";
+import TaskList from "../mobx/task-list.js";
+import { observer } from "mobx-react-lite";
 
-export default function TimeTracker() {
-  const [tasks, setTasks] = useState({});
-  const [totalTime, setTotalTime] = useState(0);
-  const [activeTaskID, setActiveTaskID] = useState(null);
-
-  useEffect(() => {
-    store.subscribe(() => {
-      const { tasks, totalSecondsPassed, currentActiveTask } = store.getState();
-      setTasks(tasks);
-      setTotalTime(totalSecondsPassed);
-      setActiveTaskID(currentActiveTask);
-    });
-  }, []);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      store.dispatch(runOncePerSecond());
-      console.log(`Tick, ${JSON.stringify(store.getState())}`); // For Debugging
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
+export const TimeTracker = observer(({ taskList }) => {
   return (
     <div css={generalCss}>
-      <NewTaskInput />
+      <NewTaskInput addNewTaskFunction={taskList.addTask} />
       <div css={taskHolderCss}>
-        {Object.values(tasks).map((task) => (
+        {Object.values(taskList.tasks).map((task) => (
           <Task
             key={task.id}
             name={task.name}
             secondsPassed={task.secondsPassed}
-            isActive={task.id === activeTaskID}
+            isActive={task.id === taskList.currentActiveTask}
             taskID={task.id}
+            pauseTaskFunction={taskList.pauseCurrentTask}
+            changeTaskFunction={taskList.changeCurrentTask}
           />
         ))}
       </div>
-      <div>Total Time Passed: {formatTimePassedInSeconds(totalTime)}</div>
+      <div>
+        Total Time Passed:{" "}
+        {formatTimePassedInSeconds(taskList.totalSecondsPassed)}
+      </div>
     </div>
   );
-}
+});
 
 const taskHolderCss = css`
   border-style: none solid;

@@ -1,8 +1,7 @@
-import { addNewTask } from "../pure-redux/reducers.js";
 import { useState } from "react";
-import { store } from "../pure-redux/store.js";
+import { observer } from "mobx-react-lite";
 
-export default function NewTaskInput() {
+export const NewTaskInput = observer(({ addNewTaskFunction }) => {
   const [taskName, setTaskName] = useState("");
 
   return (
@@ -17,7 +16,7 @@ export default function NewTaskInput() {
       />
       <button
         onClick={() => {
-          store.dispatch(addNewTask(taskName));
+          addNewTaskFunction(taskName);
           setTaskName("");
         }}
       >
@@ -25,4 +24,4 @@ export default function NewTaskInput() {
       </button>
     </div>
   );
-}
+});
