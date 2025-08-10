@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { observer } from "mobx-react-lite";
 
-export const NewTaskInput = observer(({ addNewTaskFunction }) => {
+export const NewTaskInput = observer(({ addNewTaskFunction: onAddTask }) => {
   const [taskName, setTaskName] = useState("");
 
   return (
@@ -16,7 +16,7 @@ export const NewTaskInput = observer(({ addNewTaskFunction }) => {
       />
       <button
         onClick={() => {
-          addNewTaskFunction(taskName);
+          onAddTask(taskName);
           setTaskName("");
         }}
       >

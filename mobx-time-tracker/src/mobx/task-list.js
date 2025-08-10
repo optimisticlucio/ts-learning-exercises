@@ -1,4 +1,4 @@
-import { action, autorun, makeObservable, observable } from "mobx";
+import {action, autorun, makeObservable, observable, computed} from "mobx";
 
 export default class TaskList {
   tasks = {};
@@ -12,6 +12,7 @@ export default class TaskList {
       // every update, which seems wasteful.
       totalSecondsPassed: observable,
       currentActiveTask: observable,
+      availableID: computed,
       runOncePerSecond: action,
       changeCurrentTask: action,
       addTask: action,
@@ -20,13 +21,30 @@ export default class TaskList {
 
     autorun(() =>
       setInterval(() => {
-        this.runOncePerSecond();
+        this.incrementSeconds();
         console.log(`Tick, ${JSON.stringify(this)}`); // For Debugging
       }, 1000),
     );
   }
 
-  runOncePerSecond = () => {
+  get availableID() {
+    const BIGGEST_ID = 1000;
+
+    // If the task amount is equal to the biggest ID, the list is filled up.
+    if (BIGGEST_ID === self.tasks.length) {
+      return null;
+    }
+
+    // Get random unique ID that is not currently in tasks
+    let randomID = Math.floor(Math.random() * BIGGEST_ID);
+    while (this.tasks[randomID]) {
+      randomID = Math.floor(Math.random() * BIGGEST_ID);
+    }
+
+    return randomID;
+  }
+
+  incrementSeconds = () => {
     // If there's an active task, tick forward both the task and the general time tracker.
     const activeTask = this.tasks[this.currentActiveTask];
 
@@ -48,16 +66,10 @@ export default class TaskList {
   };
 
   addTask = (taskName) => {
-    const BIGGEST_ID = 1000;
+    let availableID = this.availableID;
 
-    // Get random unique ID that is not currently in tasks
-    let randomID = Math.floor(Math.random() * BIGGEST_ID);
-    while (this.tasks[randomID]) {
-      randomID = Math.floor(Math.random() * BIGGEST_ID);
-    }
-
-    this.tasks[randomID] = {
-      id: randomID,
+    this.tasks[availableID] = {
+      id: availableID,
       secondsPassed: 0,
       name: taskName,
     };

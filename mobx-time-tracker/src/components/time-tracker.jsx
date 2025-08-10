@@ -18,8 +18,8 @@ export const TimeTracker = observer(({ taskList }) => {
             secondsPassed={task.secondsPassed}
             isActive={task.id === taskList.currentActiveTask}
             taskID={task.id}
-            pauseTaskFunction={taskList.pauseCurrentTask}
-            changeTaskFunction={taskList.changeCurrentTask}
+            onPauseTask={taskList.pauseCurrentTask}
+            onChangeTask={taskList.changeCurrentTask}
           />
         ))}
       </div>

@@ -9,8 +9,8 @@ export const Task = observer(
     secondsPassed,
     taskID,
     isActive = false,
-    pauseTaskFunction,
-    changeTaskFunction,
+        onPauseTask,
+       onChangeTask,
   }) => {
     return (
       <div css={taskCss}>
@@ -18,7 +18,7 @@ export const Task = observer(
         <div>{formatTimePassedInSeconds(secondsPassed)}</div>
         <button
           onClick={
-            isActive ? pauseTaskFunction : () => changeTaskFunction(taskID)
+            isActive ? onPauseTask : () => onChangeTask(taskID)
           }
         >
           {isActive ? "Pause" : "Start"}
