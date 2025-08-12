@@ -1,10 +1,10 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import Autocomplete from './Autocomplete.jsx'
+import PickCountry from './PickCountry.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <Autocomplete />
+    <PickCountry />
   </StrictMode>,
 )
