@@ -1,10 +1,10 @@
 /** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react";
+import { styled } from "@emotion/styled";
 import "./App.css";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-function PickCountry({
+function CountrySelector({
   selectableCountries = [],
   includeFlags = true,
   onSubmit = () =>
@@ -38,69 +38,68 @@ function PickCountry({
             })),
           );
         });
-    } else {
+      return;
+    }
       if (!Array.isArray(selectableCountries)) {
         setCountries([
           {
-            name: "Invalid selectableCountries Input",
+            name: "CountrySelector given non-array input as selectableCountries",
             flag: "⚠️",
           },
         ]);
         console.warn("selectableCountries received a non-array input.");
+        return;
       }
-      // An array of strings
-      else if (selectableCountries.every((item) => typeof item === "string")) {
+
+      let allArrayItemsAreStrings = selectableCountries.every((item) => typeof item === "string");
+      if (allArrayItemsAreStrings) {
         setCountries(selectableCountries.map((item) => ({ name: item })));
+        return;
       }
-      // An array of objects. We assume the user labeled everything correctly.
-      else if (
-        selectableCountries.every(
-          (item) => item && typeof item === "object" && !Array.isArray(item),
-        )
-      ) {
+
+      let allArrayItemsAreObjects = selectableCountries.every((item) => item && typeof item === "object" && !Array.isArray(item));
+      if (allArrayItemsAreObjects) {
         setCountries(selectableCountries);
+        return;
       }
-      // No clue what the user gave us
-      else {
-        setCountries([
-          {
-            name: "Invalid selectableCountries Input",
-            flag: "⚠️",
-          },
-        ]);
-        console.warn(
-          "selectableCountries received an input that isn't an array of strings, nor an array of objects.",
-        );
-      }
-    }
+
+      setCountries([
+        {
+          name: "CountrySelector given invalid array as selectableCountries",
+          flag: "⚠️",
+        },
+      ]);
+      console.warn(
+        "selectableCountries received an input that isn't an array of strings, nor an array of objects.",
+      );
   }, []);
 
   return (
     <>
-      <div css={boxCss}>
+      <Selector>
         <h2>Select Country</h2>
         <input
           type="text"
           list="countries"
-          onChange={(e) => setSelectedCountry(e.target.value)}
+          onChange={(event) => setSelectedCountry(event.target.value)}
         />
 
         <datalist id="countries">
           {countries.map((country) => (
             <option
               key={country.name}
-              value={`${includeFlags && country.flag !== null ? country.flag : ""} ${country.name}`}
+              value={`${includeFlags && country.flag !== null ? `${country.flag} ` : ""}${country.name}`}
             ></option>
           ))}
         </datalist>
 
         <button onClick={() => onSubmit(selectedCountry)}>Submit</button>
-      </div>
+      </Selector>
     </>
   );
 }
 
-const boxCss = css`
+const Selector = styled.div`
   border: 0.5ch double black;
   border-radius: 0.5em;
   color: black;
@@ -108,4 +107,4 @@ const boxCss = css`
   padding: 0.5em;
 `;
 
-export default PickCountry;
+export default CountrySelector;
