@@ -6,7 +6,7 @@ import axios from "axios";
 
 function CountrySelector({
   selectableCountries = [],
-  includeFlags = true,
+  includesFlags = true,
   onSubmit = () =>
     console.warn("Forgot to set onSubmit in PickCountry component"),
 }) {
@@ -27,7 +27,7 @@ function CountrySelector({
       axios
         .get("https://restcountries.com/v3.1/all", {
           params: {
-            fields: `name${includeFlags ? ",flag" : ""}`,
+            fields: `name${includesFlags ? ",flag" : ""}`,
           },
         })
         .then((response) => {
@@ -92,7 +92,7 @@ function CountrySelector({
           {countries.map((country) => (
             <option
               key={country.name}
-              value={`${includeFlags && country.flag !== null ? `${country.flag} ` : ""}${country.name}`}
+              value={`${includesFlags && country.flag !== null ? `${country.flag} ` : ""}${country.name}`}
             ></option>
           ))}
         </datalist>
