@@ -40,38 +40,42 @@ function CountrySelector({
         });
       return;
     }
-      if (!Array.isArray(selectableCountries)) {
-        setCountries([
-          {
-            name: "CountrySelector given non-array input as selectableCountries",
-            flag: "⚠️",
-          },
-        ]);
-        console.warn("selectableCountries received a non-array input.");
-        return;
-      }
-
-      let allArrayItemsAreStrings = selectableCountries.every((item) => typeof item === "string");
-      if (allArrayItemsAreStrings) {
-        setCountries(selectableCountries.map((item) => ({ name: item })));
-        return;
-      }
-
-      let allArrayItemsAreObjects = selectableCountries.every((item) => item && typeof item === "object" && !Array.isArray(item));
-      if (allArrayItemsAreObjects) {
-        setCountries(selectableCountries);
-        return;
-      }
-
+    if (!Array.isArray(selectableCountries)) {
       setCountries([
         {
-          name: "CountrySelector given invalid array as selectableCountries",
+          name: "CountrySelector given non-array input as selectableCountries",
           flag: "⚠️",
         },
       ]);
-      console.warn(
-        "selectableCountries received an input that isn't an array of strings, nor an array of objects.",
-      );
+      console.warn("selectableCountries received a non-array input.");
+      return;
+    }
+
+    let allArrayItemsAreStrings = selectableCountries.every(
+      (item) => typeof item === "string",
+    );
+    if (allArrayItemsAreStrings) {
+      setCountries(selectableCountries.map((item) => ({ name: item })));
+      return;
+    }
+
+    let allArrayItemsAreObjects = selectableCountries.every(
+      (item) => item && typeof item === "object" && !Array.isArray(item),
+    );
+    if (allArrayItemsAreObjects) {
+      setCountries(selectableCountries);
+      return;
+    }
+
+    setCountries([
+      {
+        name: "CountrySelector given invalid array as selectableCountries",
+        flag: "⚠️",
+      },
+    ]);
+    console.warn(
+      "selectableCountries received an input that isn't an array of strings, nor an array of objects.",
+    );
   }, []);
 
   return (
