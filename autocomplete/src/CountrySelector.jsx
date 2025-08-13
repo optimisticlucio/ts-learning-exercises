@@ -51,7 +51,7 @@ function CountrySelector({
       return;
     }
 
-    let allArrayItemsAreStrings = selectableCountries.every(
+    const allArrayItemsAreStrings = selectableCountries.every(
       (item) => typeof item === "string",
     );
     if (allArrayItemsAreStrings) {
@@ -59,7 +59,7 @@ function CountrySelector({
       return;
     }
 
-    let allArrayItemsAreObjects = selectableCountries.every(
+    const allArrayItemsAreObjects = selectableCountries.every(
       (item) => item && typeof item === "object" && !Array.isArray(item),
     );
     if (allArrayItemsAreObjects) {
