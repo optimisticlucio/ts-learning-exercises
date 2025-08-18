@@ -15,11 +15,11 @@ function CountrySelector({
   onSubmit = () =>
     console.warn("Forgot to set onSubmit in PickCountry component"),
 }: {
-  selectableCountries?: Country[] | string[];
+  selectableCountries?: Array<Country>;
   includesFlags?: boolean;
   onSubmit?: (country?: Country) => void;
 }) {
-  const [countries, setCountries] = useState<Country[]>([
+  const [countries, setCountries] = useState<Array<Country>>([
     {
       name: "Loading...",
       flag: "🔄",
@@ -28,19 +28,17 @@ function CountrySelector({
 
   const [selectedCountry, setSelectedCountry] = useState<Country>();
 
-  type APICountry = {
-    name: {
-      common: string;
-    }
-    flag: string;
-  }
-
   useEffect(() => {
     if (
       selectableCountries.length === 0
     ) {
       axios
-        .get<APICountry[]>("https://restcountries.com/v3.1/all", {
+        .get<Array<{
+          name: {
+            common: string;
+          }
+          flag: string;
+        }>>("https://restcountries.com/v3.1/all", {
           params: {
             fields: `name${includesFlags ? ",flag" : ""}`,
           },
@@ -56,22 +54,7 @@ function CountrySelector({
       return;
     }
 
-    const allArrayItemsAreStrings = selectableCountries.every(
-      (item) => typeof item === "string",
-    );
-    if (allArrayItemsAreStrings) {
-      setCountries(selectableCountries.map((item) => ({ name: item })));
-      return;
-    }
-
-    const allArrayItemsAreObjects = selectableCountries.every(
-      (item) => item && typeof item === "object" && !Array.isArray(item),
-    ); // I was sure there was a nicer way to type-narrow to a custom type, but I can't remember it nor find it in the book.
-    // If you remember what it is, please say so, I'd really appreciate it.
-    if (allArrayItemsAreObjects) {
-      setCountries(selectableCountries);
-      return;
-    }
+    setCountries(selectableCountries);
   }, []);
 
   return (
