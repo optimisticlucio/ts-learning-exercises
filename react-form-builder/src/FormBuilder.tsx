@@ -30,6 +30,9 @@ function FormBuilder({
               case "submit":
                 return <input type="submit" value={formElement.label} />
 
+              case "number":
+
+
               default:
                 // TODO: Delete this case once I finish coding the rest.
                 console.warn(`Forgot to handle formElement type ${formElement.type}`);

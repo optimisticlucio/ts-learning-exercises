@@ -36,9 +36,9 @@ export type HorizontalLine = {
 
 export type NumberInput = {
     type: 'number';
-    title: string;
+    title?: string;
     id: string;
-    variant: 'text' | 'range';
+    variant: 'number' | 'range';
     defaultValue?: number;
     min?: number;
     max?: number;
