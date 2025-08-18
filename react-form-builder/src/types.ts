@@ -11,7 +11,6 @@ export type TextInput = {
 export type SubmitButton = {
     type: 'submit';
     label: string;
-    submitTarget?: string;
 }
 
 export type ChoiceOption = {
