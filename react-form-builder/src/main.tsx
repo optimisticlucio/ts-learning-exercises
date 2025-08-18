@@ -5,6 +5,6 @@ import FormBuilder from './FormBuilder.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <FormBuilder />
+    <FormBuilder formElements={[]} />
   </StrictMode>,
 )
