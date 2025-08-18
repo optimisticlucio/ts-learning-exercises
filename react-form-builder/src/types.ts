@@ -1,6 +1,6 @@
 export type FormElement = TextInput | SubmitButton | ChoiceOption | Title | Paragraph | HorizontalLine | NumberInput;
 
-type TextInput = {
+export type TextInput = {
     type: 'text';
     title: string;
     variant: 'short' | 'area';
@@ -8,34 +8,34 @@ type TextInput = {
     id?: string;
 };
 
-type SubmitButton = {
+export type SubmitButton = {
     type: 'submit';
     label: string;
     submitTarget?: string;
 }
 
-type ChoiceOption = {
+export type ChoiceOption = {
     type: 'choice';
     title: string;
     variant: 'radio' | 'multi';
     options: Array<string>;
 }
 
-type Title = {
+export type Title = {
     type: 'title';
     content: string;
 }
 
-type Paragraph = {
+export type Paragraph = {
     type: 'paragraph';
     content: string;
 }
 
-type HorizontalLine = {
+export type HorizontalLine = {
     type: 'horizontalLine';
 }
 
-type NumberInput = {
+export type NumberInput = {
     type: 'number';
     title: string;
     id?: string;
