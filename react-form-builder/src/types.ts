@@ -5,7 +5,7 @@ export type TextInput = {
     title: string;
     variant: 'short' | 'area';
     defaultValue?: string;
-    id?: string;
+    id: string;
 };
 
 export type SubmitButton = {
@@ -38,7 +38,7 @@ export type HorizontalLine = {
 export type NumberInput = {
     type: 'number';
     title: string;
-    id?: string;
+    id: string;
     variant: 'text' | 'range';
     defaultValue?: number;
     min?: number;

@@ -1,35 +1,40 @@
 import './App.css'
 import type { FormElement } from "./types.ts";
 import TextInput from "./form-elements/text-input.tsx";
+import { useForm, FormProvider } from "react-hook-form";
 
 function FormBuilder({
     formElements
                      } : {
   formElements: Array<FormElement>
 }) {
+  const methods = useForm();
+
   return (
-    <form>
-      {formElements.map(formElement => {
-        switch(formElement.type) {
-          case "horizontalLine":
-            return (<br />);
+      <FormProvider {...methods}>
+        <form>
+          {formElements.map(formElement => {
+            switch(formElement.type) {
+              case "horizontalLine":
+                return (<br />);
 
-          case "title":
-            return (<h3>{formElement.content}</h3>);
+              case "title":
+                return (<h3>{formElement.content}</h3>);
 
-          case "paragraph":
-            return (<p>{formElement.content}</p>);
+              case "paragraph":
+                return (<p>{formElement.content}</p>);
 
-          case "text":
-            return <TextInput settings={formElement} />
+              case "text":
+                return <TextInput settings={formElement} />
 
-          default:
-            // TODO: Delete this case once I finish coding the rest.
-            console.warn(`Forgot to handle formElement type ${formElement.type}`);
-            return (<></>);
-        }
-        })}
-    </form>
+              default:
+                // TODO: Delete this case once I finish coding the rest.
+                console.warn(`Forgot to handle formElement type ${formElement.type}`);
+                return (<></>);
+            }
+            })}
+        </form>
+      </FormProvider>
   )
 }
 
