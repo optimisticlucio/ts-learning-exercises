@@ -8,7 +8,7 @@ export default function TextInput({ settings }: { settings: TextInput }) {
     <>
       <label id={settings.id}>{settings.title}</label>
       <br />
-      {settings.variant === "short" ? (
+      {settings.variant !== "short" ? (
         <textarea
           id={settings.id}
           {...register(settings.id, { value: settings.defaultValue })}
